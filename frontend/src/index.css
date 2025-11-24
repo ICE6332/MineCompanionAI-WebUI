@@ -1,0 +1,197 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+    --background: hsl(260 23% 97%);
+    --foreground: hsl(243 14% 27%);
+    --card: hsl(0 0% 100%);
+    --card-foreground: hsl(243 14% 27%);
+    --popover: hsl(0 0% 100%);
+    --popover-foreground: hsl(243 14% 27%);
+    --primary: hsl(260 23% 57%);
+    --primary-foreground: hsl(260 23% 97%);
+    --secondary: hsl(259 33% 89%);
+    --secondary-foreground: hsl(243 14% 27%);
+    --muted: hsl(258 15% 87%);
+    --muted-foreground: hsl(248 10% 45%);
+    --accent: hsl(342 57% 77%);
+    --accent-foreground: hsl(343 24% 24%);
+    --destructive: hsl(0 62% 61%);
+    --border: hsl(259 17% 82%);
+    --input: hsl(260 23% 92%);
+    --ring: hsl(260 23% 57%);
+    --chart-1: hsl(260 23% 57%);
+    --chart-2: hsl(342 57% 77%);
+    --chart-3: hsl(159 31% 59%);
+    --chart-4: hsl(36 77% 75%);
+    --chart-5: hsl(216 54% 76%);
+    --sidebar: hsl(260 23% 95%);
+    --sidebar-foreground: hsl(243 14% 27%);
+    --sidebar-primary: hsl(260 23% 57%);
+    --sidebar-primary-foreground: hsl(260 23% 97%);
+    --sidebar-accent: hsl(342 57% 77%);
+    --sidebar-accent-foreground: hsl(343 24% 24%);
+    --sidebar-border: hsl(261 18% 85%);
+    --sidebar-ring: hsl(260 23% 57%);
+
+    --radius: 0.5rem;
+
+    --shadow-2xs: 1px 2px 5px 1px hsl(0 0% 0% / 0.03);
+    --shadow-xs: 1px 2px 5px 1px hsl(0 0% 0% / 0.03);
+    --shadow-sm:
+        1px 2px 5px 1px hsl(0 0% 0% / 0.06), 1px 1px 2px 0px hsl(0 0% 0% / 0.06);
+    --shadow:
+        1px 2px 5px 1px hsl(0 0% 0% / 0.06), 1px 1px 2px 0px hsl(0 0% 0% / 0.06);
+    --shadow-md:
+        1px 2px 5px 1px hsl(0 0% 0% / 0.06), 1px 2px 4px 0px hsl(0 0% 0% / 0.06);
+    --shadow-lg:
+        1px 2px 5px 1px hsl(0 0% 0% / 0.06), 1px 4px 6px 0px hsl(0 0% 0% / 0.06);
+    --shadow-xl:
+        1px 2px 5px 1px hsl(0 0% 0% / 0.06),
+        1px 8px 10px 0px hsl(0 0% 0% / 0.06);
+    --shadow-2xl: 1px 2px 5px 1px hsl(0 0% 0% / 0.15);
+
+    --spacing: 0.25rem;
+
+    transition:
+        color 0.3s ease,
+        background-color 0.3s ease,
+        border-color 0.3s ease,
+        fill 0.3s ease,
+        stroke 0.3s ease;
+}
+
+.dark {
+    --background: hsl(251 19% 12%);
+    --foreground: hsl(250 36% 90%);
+    --card: hsl(251 20% 16%);
+    --card-foreground: hsl(250 36% 90%);
+    --popover: hsl(251 20% 16%);
+    --popover-foreground: hsl(250 36% 90%);
+    --primary: hsl(263 32% 69%);
+    --primary-foreground: hsl(251 19% 12%);
+    --secondary: hsl(254 15% 38%);
+    --secondary-foreground: hsl(250 36% 90%);
+    --muted: hsl(254 21% 16%);
+    --muted-foreground: hsl(259 10% 64%);
+    --accent: hsl(272 16% 21%);
+    --accent-foreground: hsl(346 69% 84%);
+    --destructive: hsl(0 69% 67%);
+    --border: hsl(252 19% 21%);
+    --input: hsl(249 20% 19%);
+    --ring: hsl(263 32% 69%);
+    --chart-1: hsl(263 32% 69%);
+    --chart-2: hsl(346 69% 84%);
+    --chart-3: hsl(159 31% 59%);
+    --chart-4: hsl(36 77% 75%);
+    --chart-5: hsl(216 54% 76%);
+    --sidebar: hsl(252 20% 10%);
+    --sidebar-foreground: hsl(250 36% 90%);
+    --sidebar-primary: hsl(263 32% 69%);
+    --sidebar-primary-foreground: hsl(251 19% 12%);
+    --sidebar-accent: hsl(272 16% 21%);
+    --sidebar-accent-foreground: hsl(346 69% 84%);
+    --sidebar-border: hsl(249 20% 19%);
+    --sidebar-ring: hsl(263 32% 69%);
+
+    --shadow-2xs: 1px 2px 5px 1px hsl(0 0% 0% / 0.03);
+    --shadow-xs: 1px 2px 5px 1px hsl(0 0% 0% / 0.03);
+    --shadow-sm:
+        1px 2px 5px 1px hsl(0 0% 0% / 0.06), 1px 1px 2px 0px hsl(0 0% 0% / 0.06);
+    --shadow:
+        1px 2px 5px 1px hsl(0 0% 0% / 0.06), 1px 1px 2px 0px hsl(0 0% 0% / 0.06);
+    --shadow-md:
+        1px 2px 5px 1px hsl(0 0% 0% / 0.06), 1px 2px 4px 0px hsl(0 0% 0% / 0.06);
+    --shadow-lg:
+        1px 2px 5px 1px hsl(0 0% 0% / 0.06), 1px 4px 6px 0px hsl(0 0% 0% / 0.06);
+    --shadow-xl:
+        1px 2px 5px 1px hsl(0 0% 0% / 0.06),
+        1px 8px 10px 0px hsl(0 0% 0% / 0.06);
+    --shadow-2xl: 1px 2px 5px 1px hsl(0 0% 0% / 0.15);
+}
+
+@theme inline {
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-destructive: var(--destructive);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+    --color-chart-1: var(--chart-1);
+    --color-chart-2: var(--chart-2);
+    --color-chart-3: var(--chart-3);
+    --color-chart-4: var(--chart-4);
+    --color-chart-5: var(--chart-5);
+    --color-sidebar: var(--sidebar);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-ring: var(--sidebar-ring);
+
+    --font-sans: "Geist", system-ui, sans-serif;
+    --font-serif: "Lora", Georgia, serif;
+    --font-mono: "Fira Code", "Courier New", monospace;
+
+    --radius-sm: calc(var(--radius) - 4px);
+    --radius-md: calc(var(--radius) - 2px);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) + 4px);
+
+    --shadow-2xs: var(--shadow-2xs);
+    --shadow-xs: var(--shadow-xs);
+    --shadow-sm: var(--shadow-sm);
+    --shadow: var(--shadow);
+    --shadow-md: var(--shadow-md);
+    --shadow-lg: var(--shadow-lg);
+    --shadow-xl: var(--shadow-xl);
+    --shadow-2xl: var(--shadow-2xl);
+}
+
+@layer base {
+    * {
+        @apply border-border outline-ring/50;
+        scrollbar-width: thin;
+        scrollbar-color: var(--border) transparent;
+    }
+
+    html {
+        @apply overflow-x-hidden;
+    }
+
+    body {
+        @apply bg-background text-foreground min-h-svh w-full;
+    }
+
+    body[data-scroll-locked] {
+        overflow: unset !important;
+    }
+
+    button:not(:disabled),
+    [role="button"]:not(:disabled) {
+        cursor: pointer;
+    }
+
+    @media screen and (max-width: 767px) {
+        input,
+        select,
+        textarea {
+            font-size: 16px !important;
+        }
+    }
+}

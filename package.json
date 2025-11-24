@@ -1,0 +1,16 @@
+{
+  "name": "minecompanionai-webui",
+  "version": "0.5.0-beta",
+  "private": true,
+  "scripts": {
+    "dev:backend": "node scripts/start-backend.js",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "dev": "node scripts/start-dev.js",
+    "build": "npm --prefix frontend run build",
+    "start": "node scripts/start-backend.js"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "kill-port": "^2.0.1"
+  }
+}

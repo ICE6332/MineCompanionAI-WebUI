@@ -1,0 +1,13 @@
+{
+    "llm": {
+        "provider": "openai",
+        "model": "gpt-4",
+        "api_key": "YOUR_API_KEY_HERE",
+        "base_url": "https://api.openai.com/v1",
+        "api_version": "2024-02-15-preview"
+    },
+    "service": {
+        "host": "0.0.0.0",
+        "port": 8080
+    }
+}
