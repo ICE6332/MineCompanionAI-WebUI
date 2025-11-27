@@ -3,6 +3,7 @@ import { Bot, Cable, Clock3, Signal } from 'lucide-react';
 import { Card, CardHeader, CardContent, CardDescription, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import type { ConnectionStatus as ConnectionStatusType } from '@/types/monitor';
+import { useModelSettings } from '@/store/model-settings';
 
 interface ConnectionStatusProps {
   isConnected: boolean;
@@ -14,7 +15,26 @@ export const ConnectionStatus = ({
   connectionStatus,
 }: ConnectionStatusProps) => {
   const modConnected = Boolean(isConnected && connectionStatus?.mod_client_id);
-  const llmReady = Boolean(connectionStatus?.llm_ready);
+
+  // Read real LLM configuration from settings store
+  const { provider, model, apiKey } = useModelSettings();
+
+  // Calculate LLM readiness based on configuration completeness
+  const llmReady = Boolean(
+    provider && model && apiKey &&
+    provider.trim() !== '' &&
+    model.trim() !== '' &&
+    apiKey.trim() !== ''
+  );
+
+  // Provider display name mapping
+  const providerNames: Record<string, string> = {
+    'openai': 'OpenAI',
+    'anthropic': 'Anthropic',
+    'google': 'Google',
+    'custom': '自定义服务',
+  };
+  const displayProvider = providerNames[provider] || provider || '未配置';
 
   const statusDot = (active: boolean) =>
     `h-2.5 w-2.5 rounded-full ${active ? 'bg-emerald-500' : 'bg-slate-300'}`;
@@ -69,11 +89,15 @@ export const ConnectionStatus = ({
         <CardContent className='space-y-2 text-sm text-muted-foreground'>
           <div className='flex items-center gap-2'>
             <Bot className='h-4 w-4 text-muted-foreground' aria-hidden />
-            <span>服务商：{connectionStatus?.llm_provider ?? '未上报'}</span>
+            <span>服务商：{displayProvider}</span>
           </div>
           <div className='flex items-center gap-2'>
             <Signal className='h-4 w-4 text-muted-foreground' aria-hidden />
-            <span>模型状态：{llmReady ? '可用' : '等待连接'}</span>
+            <span>模型：{model || '未配置'}</span>
+          </div>
+          <div className='flex items-center gap-2'>
+            <Signal className='h-4 w-4 text-muted-foreground' aria-hidden />
+            <span>状态：{llmReady ? '已就绪' : '需要配置'}</span>
           </div>
         </CardContent>
       </Card>
