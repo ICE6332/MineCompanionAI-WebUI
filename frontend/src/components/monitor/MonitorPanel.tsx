@@ -110,7 +110,7 @@ export const MonitorPanel = () => {
         Icon: GitBranch
       }
     ],
-    [isConnected, lastResetLabel, totalMessages]
+    [isConnected, lastResetLabel, totalMessages, events.length]
   );
 
   return (
