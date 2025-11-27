@@ -31,6 +31,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useModelSettings } from "@/store/model-settings";
+import { useWsStore } from "@/stores/wsStore";
 
 interface ChatMessage {
   id: string;
@@ -42,6 +43,7 @@ interface ChatMessage {
 
 const AiChatPage = () => {
   const { model: settingsModel, setModel: setSettingsModel } = useModelSettings();
+  const { addLocalMessage } = useWsStore();
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -70,6 +72,15 @@ const AiChatPage = () => {
     if (!messageText) {
       setMessages((prev) => [...prev, userMessage]);
       setInput("");
+
+      // Sync user message to Dashboard monitor
+      addLocalMessage({
+        role: "user",
+        sender: "User",
+        content: textToSend,
+        timestamp: new Date().toISOString(),
+        type: "ai_chat_test",
+      });
     }
     setIsLoading(true);
 
@@ -125,6 +136,15 @@ const AiChatPage = () => {
       };
 
       setMessages((prev) => [...prev, aiMessage]);
+
+      // Sync AI response to Dashboard monitor
+      addLocalMessage({
+        role: "assistant",
+        sender: "AI",
+        content: aiMessage.content,
+        timestamp: new Date().toISOString(),
+        type: "ai_chat_test",
+      });
     } catch (error) {
       console.error("API call failed:", error);
 
@@ -135,6 +155,15 @@ const AiChatPage = () => {
         content: `错误: ${error instanceof Error ? error.message : "Failed to get AI response"}`,
       };
       setMessages((prev) => [...prev, errorMessage]);
+
+      // Sync error message to Dashboard monitor
+      addLocalMessage({
+        role: "assistant",
+        sender: "AI",
+        content: errorMessage.content,
+        timestamp: new Date().toISOString(),
+        type: "ai_chat_test",
+      });
     } finally {
       setIsLoading(false);
     }

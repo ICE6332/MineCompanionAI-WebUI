@@ -14,7 +14,7 @@ import {
 
 import { Analytics } from "@/components/dashboard/analytics";
 import { TokenTrendChart } from "@/components/dashboard/token-trend-chart";
-import { RecentSales } from "@/components/dashboard/recent-sales";
+import GameMessageLog from "@/components/dashboard/game-message-log";
 import { useWsStore } from "@/stores/wsStore";
 import { api, TokenTrendData } from "@/lib/api";
 import {
@@ -190,11 +190,11 @@ export function Dashboard() {
               />
               <Card className="col-span-1 lg:col-span-3">
                 <CardHeader>
-                  <CardTitle>最新活动</CardTitle>
-                  <CardDescription>近期示例事件与通知</CardDescription>
+                  <CardTitle>游戏/AI 消息日志</CardTitle>
+                  <CardDescription>实时监控游戏内对话与事件</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <RecentSales />
+                  <GameMessageLog />
                 </CardContent>
               </Card>
             </div>
