@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Activity, AlertTriangle, Clock3, Wifi, ChevronDown } from 'lucide-react';
+import { Activity, Clock3, Wifi, ChevronDown, GitBranch } from 'lucide-react';
 
 import { ContentLayout } from '@/components/admin-panel/content-layout';
 import {
@@ -98,19 +98,19 @@ export const MonitorPanel = () => {
         Icon: Wifi
       },
       {
-        title: '平均响应时间',
-        value: '-- ms',
-        description: '等待接入后端指标，暂作占位',
+        title: '事件记录',
+        value: events.length,
+        description: '当前会话累计事件',
         Icon: Clock3
       },
       {
-        title: '错误率',
-        value: '0%',
-        description: '当前未检测到错误',
-        Icon: AlertTriangle
+        title: '分支',
+        value: 'Main',
+        description: '当前开发分支',
+        Icon: GitBranch
       }
     ],
-    [isConnected, lastResetLabel, totalMessages]
+    [isConnected, lastResetLabel, totalMessages, events.length]
   );
 
   return (
@@ -195,15 +195,15 @@ export const MonitorPanel = () => {
                   </DropdownMenuRadioGroup>
                 </DropdownMenuContent>
               </DropdownMenu>
-              </div>
-              <Button
-                variant={autoScroll ? 'default' : 'secondary'}
-                onClick={toggleAutoScroll}
-                className='min-h-11 px-4'
-                aria-label='自动滚动'
-              >
-                {autoScroll ? '开启' : '关闭'}
-              </Button>
+            </div>
+            <Button
+              variant={autoScroll ? 'default' : 'secondary'}
+              onClick={toggleAutoScroll}
+              className='min-h-11 px-4'
+              aria-label='自动滚动'
+            >
+              {autoScroll ? '开启' : '关闭'}
+            </Button>
             <Button
               variant={showTimestamps ? 'default' : 'secondary'}
               onClick={toggleTimestamps}
