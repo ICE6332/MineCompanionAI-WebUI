@@ -9,6 +9,7 @@ interface WsStore {
     connect: () => void;
     disconnect: () => void;
     sendMessage: (message: string) => void;
+    addLocalMessage: (message: any) => void;
 }
 
 export const useWsStore = create<WsStore>((set, get) => ({
@@ -66,5 +67,13 @@ export const useWsStore = create<WsStore>((set, get) => ({
         } else {
             console.error("WebSocket not connected");
         }
+    },
+
+    addLocalMessage: (message) => {
+        const { messages } = get();
+        const serializedMessage = typeof message === "string"
+            ? message
+            : JSON.stringify(message);
+        set({ messages: [...messages, serializedMessage] });
     },
 }));
