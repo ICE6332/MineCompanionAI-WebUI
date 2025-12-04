@@ -60,6 +60,13 @@ uv sync
 pip install -r requirements.lock.txt
 ```
 
+#### 根目录开发依赖（使用 Bun）
+```bash
+bun install
+```
+
+> 说明：启动脚本（如 `bun run dev`/`bun run dev:backend`）依赖根目录的开发依赖（例如 `concurrently`、`kill-port`）。
+
 #### 前端依赖（使用 Bun）
 ```bash
 cd frontend
