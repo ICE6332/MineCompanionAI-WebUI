@@ -90,7 +90,7 @@ CLAUDE.md
 
 # Local npm cache (Windows)
 .npm-cache/
-/docs.md
+/docs/docs.md
 /WARP.md
 
 # Python/UV local cache
@@ -98,3 +98,9 @@ CLAUDE.md
 
 # Local env backups
 .env.backup
+
+# Local design documentation (not tracked)
+docs/
+
+# WASM binaries
+wasm/*.wasm
