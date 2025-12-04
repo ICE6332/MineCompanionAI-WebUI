@@ -19,8 +19,11 @@ from core.monitor.event_bus import EventBus
 from core.monitor.metrics_collector import MetricsCollector
 from core.monitor.connection_manager import ConnectionManager
 from core.llm.service import LLMService
+from core.engine import EngineSessionManager, WASMRuntime
 from core.storage.memory import MemoryCacheStorage
 from core.storage.redis import RedisCacheStorage
+from core.storage.story import StoryStore
+from core.storage.vision import VisionStore
 from core.memory.conversation_context import ConversationContext
 
 
@@ -39,6 +42,22 @@ async def lifespan(app: FastAPI):
     app.state.connection_manager = ConnectionManager()
     app.state.llm_service = LLMService(cache_storage=cache_storage)
     app.state.conversation_context = ConversationContext()
+    # 初始化引擎依赖，失败时保持禁用以便服务可继续运行
+    try:
+        vision_store = VisionStore()
+        story_store = StoryStore()
+        await vision_store.init_schema()
+        await story_store.init_schema()
+        runtime = WASMRuntime()
+        app.state.engine_manager = EngineSessionManager(
+            runtime=runtime,
+            vision_store=vision_store,
+            story_store=story_store,
+        )
+        logger.info("Engine 会话管理器已启用")
+    except Exception as exc:  # noqa: BLE001
+        app.state.engine_manager = None
+        logger.warning("引擎初始化失败，暂不启用: %s", exc)
 
     logger.info("存储后端: %s", settings.storage_backend)
     # 注册监控事件订阅，将事件广播到前端监控页面
@@ -55,6 +74,13 @@ async def lifespan(app: FastAPI):
             await connection_manager.close_all()
         except Exception as exc:  # noqa: BLE001
             logger.warning("关闭 WebSocket 连接失败: %s", exc)
+
+    engine_manager = getattr(app.state, "engine_manager", None)
+    if engine_manager is not None:
+        try:
+            await engine_manager.close_all()
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("关闭 Engine 会话失败: %s", exc)
 
     # 2. 关闭缓存存储
     if hasattr(cache_storage, "close"):
