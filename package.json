@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "dev:backend": "node scripts/start-backend.js",
-    "dev:frontend": "npm --prefix frontend run dev",
+    "dev:frontend": "bun --cwd frontend run dev",
+    "dev:frontend:npm": "npm --prefix frontend run dev",
     "dev": "node scripts/start-dev.js",
-    "build": "npm --prefix frontend run build",
+    "build": "bun --cwd frontend run build",
+    "build:npm": "npm --prefix frontend run build",
     "start": "node scripts/start-backend.js"
   },
   "devDependencies": {
