@@ -1,4 +1,5 @@
 import { defineConfig } from "vite";
+import { configDefaults } from "vitest/config";
 import react from "@vitejs/plugin-react-swc";
 import tailwindcss from "@tailwindcss/vite";
 import path from "path";
@@ -26,5 +27,12 @@ export default defineConfig({
     build: {
         outDir: "../static/dist",
         emptyOutDir: true,
+    },
+    test: {
+        environment: "jsdom",
+        globals: true,
+        include: ["src/**/*.{test,spec}.{ts,tsx}"],
+        exclude: [...configDefaults.exclude, "node_modules", "dist"],
+        setupFiles: ["./src/test/setupTests.ts"],
     },
 });
