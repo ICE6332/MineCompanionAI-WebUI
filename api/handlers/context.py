@@ -1,11 +1,14 @@
 """消息处理上下文。"""
 
 from dataclasses import dataclass
+from typing import Optional
+
 from core.interfaces import (
     EventBusInterface,
     MetricsInterface,
     LLMServiceInterface,
     ConversationContextInterface,
+    EngineSessionManagerInterface,
 )
 
 
@@ -18,3 +21,4 @@ class HandlerContext:
     metrics: MetricsInterface
     llm_service: LLMServiceInterface
     conversation_context: ConversationContextInterface
+    engine_manager: Optional[EngineSessionManagerInterface] = None

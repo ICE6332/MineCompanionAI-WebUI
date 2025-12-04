@@ -5,6 +5,7 @@
 
 from __future__ import annotations
 
+from datetime import datetime, timedelta
 from typing import Any, Callable, Dict, List, Optional, Protocol
 
 from core.monitor.event_types import MonitorEventType
@@ -98,3 +99,44 @@ class ConversationContextInterface(Protocol):
     def clear_session(self, client_id: str) -> None: ...
 
     def has_session(self, client_id: str) -> bool: ...
+
+
+class EngineHandleInterface(Protocol):
+    """WASM Engine 实例句柄的标记接口。"""
+
+
+class WASMRuntimeInterface(Protocol):
+    """WASM 运行时接口，负责创建与驱动引擎实例。"""
+
+    def create_engine(self, config_json: str) -> EngineHandleInterface: ...
+
+    def process(self, handle: EngineHandleInterface, input_json: str) -> List[str]: ...
+
+    def tick(self, handle: EngineHandleInterface, elapsed_ms: int) -> List[str]: ...
+
+
+class EngineSessionInterface(Protocol):
+    """单个引擎会话接口，记录会话状态。"""
+
+    session_id: str
+    character_id: str
+    initialized: bool
+    last_active: datetime
+
+
+class EngineSessionManagerInterface(Protocol):
+    """多会话管理接口，负责获取与清理引擎会话。"""
+
+    async def get_or_create(
+        self,
+        session_id: str,
+        character_id: str,
+        character_card: Dict[str, Any],
+        config: Dict[str, Any],
+    ) -> EngineSessionInterface: ...
+
+    def get(self, session_id: str) -> Optional[EngineSessionInterface]: ...
+
+    async def cleanup_idle(self, timeout: timedelta) -> None: ...
+
+    async def close_all(self) -> None: ...

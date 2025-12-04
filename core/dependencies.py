@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Annotated
+from typing import Annotated, Optional
 
 from fastapi import Depends
 from starlette.requests import HTTPConnection
@@ -13,6 +13,7 @@ from core.interfaces import (
     LLMServiceInterface,
     ConnectionManagerInterface,
     ConversationContextInterface,
+    EngineSessionManagerInterface,
 )
 from core.storage.interfaces import CacheStorage
 
@@ -44,6 +45,10 @@ def get_conversation_context(conn: HTTPConnection) -> ConversationContextInterfa
     return conn.app.state.conversation_context
 
 
+def get_engine_manager(conn: HTTPConnection) -> Optional[EngineSessionManagerInterface]:
+    return getattr(conn.app.state, "engine_manager", None)
+
+
 # 类型别名，便于在路由上直接声明
 EventBusDep = Annotated[EventBusInterface, Depends(get_event_bus)]
 MetricsDep = Annotated[MetricsInterface, Depends(get_metrics)]
@@ -51,3 +56,4 @@ LLMDep = Annotated[LLMServiceInterface, Depends(get_llm_service)]
 ConnectionManagerDep = Annotated[ConnectionManagerInterface, Depends(get_connection_manager)]
 CacheStorageDep = Annotated[CacheStorage, Depends(get_cache_storage)]
 ConversationContextDep = Annotated[ConversationContextInterface, Depends(get_conversation_context)]
+EngineManagerDep = Annotated[Optional[EngineSessionManagerInterface], Depends(get_engine_manager)]
