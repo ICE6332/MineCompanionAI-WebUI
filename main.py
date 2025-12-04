@@ -121,12 +121,12 @@ if STATIC_DIR.exists():
     app.mount("/assets", StaticFiles(directory=STATIC_DIR / "assets"), name="assets")
     logger.info("✅ 生产模式：静态文件服务已启用 (路径: %s)", STATIC_DIR)
 else:
-    # 开发模式：前端由 Vite 开发服务器提供，根路径跳转到 API 文档
+    # 开发模式：前端由 Vite 开发服务器提供，根路径跳转到前端开发服务器
     @app.get("/", include_in_schema=False)
     async def dev_mode_redirect():
-        """开发模式：跳转到 API 文档"""
-        return RedirectResponse(url="/docs")
-    logger.info("⚠️ 开发模式：未找到静态文件目录，根路径跳转到 /docs")
+        """开发模式：跳转到前端开发服务器"""
+        return RedirectResponse(url="http://localhost:5173")
+    logger.info("⚠️ 开发模式：未找到静态文件目录，根路径跳转到前端开发服务器 (http://localhost:5173)")
 
 
 if __name__ == "__main__":

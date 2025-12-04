@@ -36,9 +36,9 @@
 
 ### 前置要求
 
-- Node.js >= 18.0.0
-- Python >= 3.12
-- npm >= 9.0.0
+- Node.js >= 18.0.0（建议配合 Bun 使用）
+- Python >= 3.14
+- Bun >= 1.0.0
 - uv (推荐) 或 pip
 
 ### 安装依赖
@@ -60,15 +60,13 @@ uv sync
 pip install -r requirements.lock.txt
 ```
 
-#### 前端依赖
+#### 前端依赖（使用 Bun）
 ```bash
-cd frontend && npm install
+cd frontend
+bun install
 ```
 
-#### 根目录依赖
-```bash
-npm install
-```
+> 说明：本项目前端已迁移为使用 Bun 作为包管理器。
 
 ---
 
@@ -77,7 +75,7 @@ npm install
 ### 一键启动（推荐）
 
 ```bash
-npm run dev
+bun run dev
 ```
 
 这将同时启动：
@@ -91,8 +89,8 @@ npm run dev
 # 使用uv（推荐，自动使用项目虚拟环境）
 uv run python main.py
 
-# 或使用npm script（已集成uv）
-npm run dev:backend
+# 或使用 package.json script（已集成uv）
+bun run dev:backend
 
 # 或直接运行（需要先激活.venv）
 python main.py
@@ -100,7 +98,8 @@ python main.py
 
 **仅前端**:
 ```bash
-cd frontend && npm run dev
+cd frontend
+bun run dev
 ```
 
 ---
@@ -162,12 +161,13 @@ MineCompanionAI-WebUI/
 
 ### 构建前端
 ```bash
-cd frontend && npm run build
+cd frontend
+bun run build
 ```
 
 ### 生产部署
 ```bash
-npm run build
+bun run build
 python main.py
 ```
 
@@ -196,7 +196,7 @@ uv sync
 ### 前端构建失败
 ```bash
 cd frontend
-npm install tailwindcss@latest @tailwindcss/vite@latest --save-dev
+bun add -d tailwindcss@latest @tailwindcss/vite@latest
 ```
 
 ---

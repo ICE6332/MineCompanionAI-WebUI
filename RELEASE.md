@@ -18,7 +18,7 @@ This branch contains **ONLY** production-ready code:
 2. When ready to release:
    ```bash
    # Compile frontend
-   npm run build
+   bun run build
 
    # Switch to release branch
    git checkout release
