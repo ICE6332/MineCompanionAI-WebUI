@@ -3,6 +3,8 @@
 该模块提供 ``CompactProtocol``，用于在“紧凑格式(短字段)”与“内部标准格式(长字段)”之间转换，
 并保持向后兼容：同时支持旧版包含 ``data`` 字段的标准消息结构。
 """
+# pyright: reportArgumentType=false
+
 
 from typing import Any, Dict
 

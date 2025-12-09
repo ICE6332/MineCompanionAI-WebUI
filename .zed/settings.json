@@ -1,0 +1,23 @@
+{
+  "languages": {
+    "Python": {
+      "language_servers": ["basedpyright", "!pyright"],
+      "formatter": {
+        "external": {
+          "command": ".venv/Scripts/python.exe",
+          "arguments": ["-m", "black", "-"]
+        }
+      }
+    }
+  },
+  "lsp": {
+    "basedpyright": {
+      "settings": {
+        "python.pythonPath": ".venv/Scripts/python.exe",
+        "python.analysis.extraPaths": ["."],
+        "python.analysis.typeCheckingMode": "basic",
+        "basedpyright.analysis.extraPaths": ["."]
+      }
+    }
+  }
+}

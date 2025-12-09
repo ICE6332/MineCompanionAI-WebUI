@@ -4,11 +4,11 @@ from dataclasses import dataclass
 from typing import Optional
 
 from core.interfaces import (
-    EventBusInterface,
-    MetricsInterface,
-    LLMServiceInterface,
     ConversationContextInterface,
     EngineSessionManagerInterface,
+    EventBusInterface,
+    LLMServiceInterface,
+    MetricsInterface,
 )
 
 

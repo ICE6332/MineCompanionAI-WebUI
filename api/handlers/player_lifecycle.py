@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 import logging
 from datetime import datetime, timezone
-from typing import Dict, Any
+from typing import Any, Dict
 
 from fastapi import WebSocket
 
@@ -17,10 +17,18 @@ logger = logging.getLogger("api.handlers.player_lifecycle")
 
 
 class PlayerConnectedHandler(MessageHandler):
-    async def handle(self, websocket: WebSocket, message: Dict[str, Any], context: HandlerContext) -> str:
+    async def handle(
+        self, websocket: WebSocket, message: Dict[str, Any], context: HandlerContext
+    ) -> str:
         player_name = str(message.get("playerName") or "玩家")
-        session = context.conversation_context.create_session(context.client_id, player_name)
-        logger.info("玩家进入世界，已创建对话会话: client=%s, player=%s", context.client_id, player_name)
+        session = context.conversation_context.create_session(
+            context.client_id, player_name
+        )
+        logger.info(
+            "玩家进入世界，已创建对话会话: client=%s, player=%s",
+            context.client_id,
+            player_name,
+        )
 
         response = {
             "type": "player_connected_ack",
@@ -43,10 +51,16 @@ class PlayerConnectedHandler(MessageHandler):
 
 
 class PlayerDisconnectedHandler(MessageHandler):
-    async def handle(self, websocket: WebSocket, message: Dict[str, Any], context: HandlerContext) -> str:
+    async def handle(
+        self, websocket: WebSocket, message: Dict[str, Any], context: HandlerContext
+    ) -> str:
         player_name = str(message.get("playerName") or "玩家")
         context.conversation_context.clear_session(context.client_id)
-        logger.info("玩家离开世界，已清空会话: client=%s, player=%s", context.client_id, player_name)
+        logger.info(
+            "玩家离开世界，已清空会话: client=%s, player=%s",
+            context.client_id,
+            player_name,
+        )
 
         response = {
             "type": "player_disconnected_ack",

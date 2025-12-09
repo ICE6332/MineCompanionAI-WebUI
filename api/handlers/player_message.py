@@ -19,7 +19,9 @@ logger = logging.getLogger("api.handlers.player_message")
 class PlayerMessageHandler(MessageHandler):
     """转发玩家文本给引擎并返回响应。"""
 
-    async def handle(self, websocket: WebSocket, message: Dict[str, Any], context: HandlerContext) -> str:
+    async def handle(
+        self, websocket: WebSocket, message: Dict[str, Any], context: HandlerContext
+    ) -> str:
         session_id = str(message.get("session_id") or message.get("sessionId") or "")
         player_id = str(message.get("player_id") or message.get("playerId") or "")
         text = str(message.get("text") or "")
@@ -54,7 +56,11 @@ class PlayerMessageHandler(MessageHandler):
         try:
             outputs = await session.on_player_message(runtime, player_id, text)
         except Exception as exc:  # noqa: BLE001
-            logger.exception("player_message 处理失败: client=%s, session=%s", context.client_id, session_id)
+            logger.exception(
+                "player_message 处理失败: client=%s, session=%s",
+                context.client_id,
+                session_id,
+            )
             return await self._send_error(
                 websocket,
                 context,
