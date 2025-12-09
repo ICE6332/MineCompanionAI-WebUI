@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 import logging
 from datetime import datetime, timezone
-from typing import Dict, Any
+from typing import Any, Dict
 
 from fastapi import WebSocket
 
@@ -15,18 +15,21 @@ from api.protocol import CompactProtocol
 from core.monitor.event_types import MonitorEventType
 from core.monitor.token_tracker import TokenTracker
 
-
 logger = logging.getLogger("api.handlers.conversation")
 
 
 class ConversationHandler(MessageHandler):
-    async def handle(self, websocket: WebSocket, message: Dict[str, Any], context: HandlerContext) -> str:
+    async def handle(
+        self, websocket: WebSocket, message: Dict[str, Any], context: HandlerContext
+    ) -> str:
         standard_message: Dict[str, Any] = CompactProtocol.parse(message)
 
         player_name: str = str(standard_message.get("playerName") or "玩家")
         player_message: str = str(standard_message.get("message", "") or "")
         message_id: str = str(standard_message.get("id", "") or "")
-        companion_name: str = str(standard_message.get("companionName", "AICompanion") or "AICompanion")
+        companion_name: str = str(
+            standard_message.get("companionName", "AICompanion") or "AICompanion"
+        )
 
         system_prompt = (
             f"你是 Minecraft 世界中的 AI 伙伴，名字叫 {companion_name}。"
@@ -34,11 +37,21 @@ class ConversationHandler(MessageHandler):
         )
         history_entries = context.conversation_context.get_history(context.client_id)
         history_messages = [
-            {"role": entry.get("role", "user"), "content": str(entry.get("content", ""))}
+            {
+                "role": entry.get("role", "user"),
+                "content": str(entry.get("content", "")),
+            }
             for entry in history_entries
         ]
-        current_user_message = {"role": "user", "content": f"[{player_name}] {player_message}"}
-        llm_messages = [{"role": "system", "content": system_prompt}, *history_messages, current_user_message]
+        current_user_message = {
+            "role": "user",
+            "content": f"[{player_name}] {player_message}",
+        }
+        llm_messages = [
+            {"role": "system", "content": system_prompt},
+            *history_messages,
+            current_user_message,
+        ]
 
         default_reply = "抱歉，我暂时无法响应，请稍后再试。"
         reply: str = default_reply
@@ -64,8 +77,7 @@ class ConversationHandler(MessageHandler):
         try:
             # 对话场景禁用缓存，避免相同问题返回旧答案
             llm_response = await context.llm_service.chat_completion(
-                messages=llm_messages,
-                use_cache=False
+                messages=llm_messages, use_cache=False
             )
             choices = llm_response.get("choices", [])
             first_choice = choices[0] if choices else {}
@@ -96,7 +108,9 @@ class ConversationHandler(MessageHandler):
                 },
             )
         except Exception as exc:  # noqa: BLE001
-            logger.exception("LLM 调用失败: client=%s, message=%s", context.client_id, message_id)
+            logger.exception(
+                "LLM 调用失败: client=%s, message=%s", context.client_id, message_id
+            )
             context.event_bus.publish(
                 MonitorEventType.LLM_ERROR,
                 {
@@ -121,7 +135,9 @@ class ConversationHandler(MessageHandler):
 
         compact_response: Dict[str, Any] = CompactProtocol.compact(standard_response)
 
-        stats: Dict[str, Any] = TokenTracker.compare(standard_response, compact_response)
+        stats: Dict[str, Any] = TokenTracker.compare(
+            standard_response, compact_response
+        )
         stats["client_id"] = context.client_id
         stats["message_type"] = "conversation"
 

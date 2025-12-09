@@ -4,13 +4,14 @@ from __future__ import annotations
 
 import logging
 from datetime import datetime, timezone
-from typing import Any, Dict, List
+from typing import Any, Dict, List, cast
 
 import orjson
 from fastapi import WebSocket
 
 from api.handlers.base import MessageHandler
 from api.handlers.context import HandlerContext
+from core.interfaces import EngineSessionInterface
 from core.monitor.event_types import MonitorEventType
 
 logger = logging.getLogger("api.handlers.world_diff")
@@ -19,7 +20,9 @@ logger = logging.getLogger("api.handlers.world_diff")
 class WorldDiffHandler(MessageHandler):
     """将世界增量同步到引擎并回传动作。"""
 
-    async def handle(self, websocket: WebSocket, message: Dict[str, Any], context: HandlerContext) -> str:
+    async def handle(
+        self, websocket: WebSocket, message: Dict[str, Any], context: HandlerContext
+    ) -> str:
         session_id = str(message.get("session_id") or message.get("sessionId") or "")
         diff = message.get("data") or {}
 
@@ -41,6 +44,9 @@ class WorldDiffHandler(MessageHandler):
                 "未找到对应会话",
             )
 
+        # Type assertion for Protocol type narrowing
+        session = cast(EngineSessionInterface, session)
+
         runtime = getattr(engine_manager, "runtime", None)
         vision_store = getattr(engine_manager, "vision_store", None)
         story_store = getattr(engine_manager, "story_store", None)
@@ -53,9 +59,15 @@ class WorldDiffHandler(MessageHandler):
             )
 
         try:
-            outputs = await session.on_world_diff(runtime, vision_store, story_store, diff)
+            outputs = await session.on_world_diff(
+                runtime, vision_store, story_store, diff
+            )
         except Exception as exc:  # noqa: BLE001
-            logger.exception("world_diff 处理失败: client=%s, session=%s", context.client_id, session_id)
+            logger.exception(
+                "world_diff 处理失败: client=%s, session=%s",
+                context.client_id,
+                session_id,
+            )
             return await self._send_error(
                 websocket,
                 context,

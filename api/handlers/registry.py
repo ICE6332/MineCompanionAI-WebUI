@@ -4,7 +4,10 @@ from api.handlers.connection import ConnectionInitHandler
 from api.handlers.conversation import ConversationHandler
 from api.handlers.engine_init import EngineInitHandler
 from api.handlers.game_state import GameStateHandler
-from api.handlers.player_lifecycle import PlayerConnectedHandler, PlayerDisconnectedHandler
+from api.handlers.player_lifecycle import (
+    PlayerConnectedHandler,
+    PlayerDisconnectedHandler,
+)
 from api.handlers.player_message import PlayerMessageHandler
 from api.handlers.world_diff import WorldDiffHandler
 

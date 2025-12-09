@@ -1,5 +1,7 @@
 """WASM 引擎运行时，实现 WASMRuntimeInterface。"""
 
+# pyright: reportArgumentType=false, reportCallIssue=false
+
 from __future__ import annotations
 
 import ctypes

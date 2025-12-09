@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 from datetime import datetime, timezone
-from typing import Dict, Any
+from typing import Any, Dict
 
 from fastapi import WebSocket
 
@@ -14,7 +14,9 @@ from core.monitor.event_types import MonitorEventType
 
 
 class GameStateHandler(MessageHandler):
-    async def handle(self, websocket: WebSocket, message: Dict[str, Any], context: HandlerContext) -> str:
+    async def handle(
+        self, websocket: WebSocket, message: Dict[str, Any], context: HandlerContext
+    ) -> str:
         game_state = message.get("data", {})
         player_name = game_state.get("player_name", "Unknown")
 

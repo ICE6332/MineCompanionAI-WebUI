@@ -6,10 +6,13 @@
 from __future__ import annotations
 
 from datetime import datetime, timedelta
-from typing import Any, Callable, Dict, List, Optional, Protocol
+from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional, Protocol
 
 from core.monitor.event_types import MonitorEventType
 from models.monitor import ConnectionStatus, MessageStats, TokenTrendStats
+
+if TYPE_CHECKING:
+    from core.memory.conversation_context import ConversationSession
 
 
 class EventBusInterface(Protocol):
@@ -88,7 +91,9 @@ class ConnectionManagerInterface(Protocol):
 class ConversationContextInterface(Protocol):
     """会话上下文接口，管理游戏玩家的历史消息。"""
 
-    def create_session(self, client_id: str, player_name: str): ...
+    def create_session(
+        self, client_id: str, player_name: str
+    ) -> "ConversationSession": ...
 
     def add_message(
         self, client_id: str, role: str, content: str, player_name: Optional[str] = None
@@ -122,6 +127,21 @@ class EngineSessionInterface(Protocol):
     character_id: str
     initialized: bool
     last_active: datetime
+
+    async def on_world_diff(
+        self,
+        runtime: Any,
+        vision_store: Any,
+        story_store: Any,
+        diff: dict,
+    ) -> list[dict]: ...
+
+    async def on_player_message(
+        self,
+        runtime: Any,
+        player_id: str,
+        text: str,
+    ) -> list[dict]: ...
 
 
 class EngineSessionManagerInterface(Protocol):

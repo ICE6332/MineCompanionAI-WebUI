@@ -19,10 +19,16 @@ logger = logging.getLogger("api.handlers.engine_init")
 class EngineInitHandler(MessageHandler):
     """初始化引擎会话。"""
 
-    async def handle(self, websocket: WebSocket, message: Dict[str, Any], context: HandlerContext) -> str:
+    async def handle(
+        self, websocket: WebSocket, message: Dict[str, Any], context: HandlerContext
+    ) -> str:
         session_id = str(message.get("session_id") or message.get("sessionId") or "")
-        character_id = str(message.get("character_id") or message.get("characterId") or "")
-        character_card = message.get("character_card") or message.get("characterCard") or {}
+        character_id = str(
+            message.get("character_id") or message.get("characterId") or ""
+        )
+        character_card = (
+            message.get("character_card") or message.get("characterCard") or {}
+        )
         config = message.get("config") or {}
 
         engine_manager = context.engine_manager
@@ -53,7 +59,9 @@ class EngineInitHandler(MessageHandler):
             self._record_send(context, response["type"])
             return serialized
         except Exception as exc:  # noqa: BLE001
-            logger.exception("引擎初始化失败: client=%s, session=%s", context.client_id, session_id)
+            logger.exception(
+                "引擎初始化失败: client=%s, session=%s", context.client_id, session_id
+            )
             payload = {
                 "type": "error",
                 "code": "init_failed",

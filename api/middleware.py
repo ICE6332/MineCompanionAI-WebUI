@@ -8,22 +8,22 @@ from starlette.responses import Response
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
     """
     添加安全 HTTP 头部以增强应用防御能力
-    
+
     包含的安全头部:
     - X-Content-Type-Options: 防止 MIME 类型嗅探
     - X-Frame-Options: 防止点击劫持
     - X-XSS-Protection: 启用浏览器 XSS 保护
     - Content-Security-Policy: 内容安全策略
     """
-    
+
     async def dispatch(self, request: Request, call_next):
         response: Response = await call_next(request)
-        
+
         # 基本安全头部
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["X-Frame-Options"] = "DENY"
         response.headers["X-XSS-Protection"] = "1; mode=block"
-        
+
         # 内容安全策略（针对本地开发调整）
         # 允许 localhost 和 WebSocket 连接
         response.headers["Content-Security-Policy"] = (
@@ -37,5 +37,5 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
             "base-uri 'self'; "
             "form-action 'self'"
         )
-        
+
         return response

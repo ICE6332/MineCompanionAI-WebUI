@@ -141,13 +141,13 @@ MineCompanionAI-WebUI/
 
 ### REST API
 
-| 端点 | 方法 | 描述 |
-|------|------|------|
-| /health | GET | 健康检查（兼容探活） |
-| /api/health | GET | 健康检查 |
-| /api/cards | GET | 获取所有角色卡 |
-| /api/cards | POST | 保存角色卡 |
-| /api/cards/{id} | DELETE | 删除角色卡 |
+| 端点              | 方法     | 描述         |
+|-----------------|--------|------------|
+| /health         | GET    | 健康检查（兼容探活） |
+| /api/health     | GET    | 健康检查       |
+| /api/cards      | GET    | 获取所有角色卡    |
+| /api/cards      | POST   | 保存角色卡      |
+| /api/cards/{id} | DELETE | 删除角色卡      |
 
 ### WebSocket
 
