@@ -139,10 +139,10 @@ export function CollapseMenuButton({
           <TooltipTrigger asChild>
             <DropdownMenuTrigger asChild>
               <Button
-                variant={isActive ? "secondary" : "ghost"}
-                className="w-full justify-start min-h-11 py-2 mb-1"
+                variant="ghost"
+                className="w-full justify-center min-h-11 py-2 mb-1"
               >
-                <div className="w-full items-center flex justify-between">
+                <div className="w-full items-center flex justify-center">
                   <div className="flex items-center">
                     <span className={cn(isOpen === false ? "" : "mr-4")}>
                       <Icon size={18} />
@@ -173,10 +173,9 @@ export function CollapseMenuButton({
         {submenus.map(({ href, label, active }, index) => (
           <DropdownMenuItem key={index} asChild>
             <Link
-              className={`cursor-pointer ${
-                ((active === undefined && pathname === href) || active) &&
+              className={`cursor-pointer ${((active === undefined && pathname === href) || active) &&
                 "bg-secondary"
-              }`}
+                }`}
               to={href}
             >
               <p className="max-w-[180px] truncate">{label}</p>

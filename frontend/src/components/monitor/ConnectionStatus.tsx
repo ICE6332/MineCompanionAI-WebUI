@@ -19,15 +19,13 @@ export const ConnectionStatus = ({
   // Read real LLM configuration from settings store
   const { provider, model, apiKey } = useModelSettings();
 
-  // Calculate LLM readiness based on configuration completeness and backend status
-  const llmConfigured = Boolean(
+  // Calculate LLM readiness based on configuration completeness
+  const llmReady = Boolean(
     provider && model && apiKey &&
     provider.trim() !== '' &&
     model.trim() !== '' &&
     apiKey.trim() !== ''
   );
-  const llmBackendReady = Boolean(isConnected && connectionStatus?.llm_ready);
-  const llmReady = llmConfigured && llmBackendReady;
 
   // Provider display name mapping
   const providerNames: Record<string, string> = {
@@ -36,11 +34,7 @@ export const ConnectionStatus = ({
     'google': 'Google',
     'custom': '自定义服务',
   };
-  const displayProvider =
-    providerNames[connectionStatus?.llm_provider || provider] ||
-    connectionStatus?.llm_provider ||
-    provider ||
-    '未配置';
+  const displayProvider = providerNames[provider] || provider || '未配置';
 
   const statusDot = (active: boolean) =>
     `h-2.5 w-2.5 rounded-full ${active ? 'bg-emerald-500' : 'bg-slate-300'}`;

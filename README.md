@@ -60,18 +60,13 @@ uv sync
 pip install -r requirements.lock.txt
 ```
 
-#### 根目录开发依赖（使用 Bun）
-```bash
-bun install
-```
-
-> 说明：启动脚本（如 `bun run dev`/`bun run dev:backend`）依赖根目录的开发依赖（例如 `concurrently`、`kill-port`）。
-
 #### 前端依赖（使用 Bun）
 ```bash
 cd frontend
 bun install
 ```
+
+> 说明：本项目前端已迁移为使用 Bun 作为包管理器。
 
 > 说明：本项目前端已迁移为使用 Bun 作为包管理器。
 
@@ -221,7 +216,7 @@ bun add -d tailwindcss@latest @tailwindcss/vite@latest
 
 ## 📄 许可证
 
-本项目采用AGPL3.0许可证
+本项目采用 AGPL-3.0 许可证
 
 ---
 

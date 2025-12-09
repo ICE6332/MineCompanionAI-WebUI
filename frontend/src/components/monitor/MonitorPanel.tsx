@@ -1,8 +1,8 @@
-import { useMemo } from 'react';
-import { Link } from 'react-router-dom';
-import { Activity, Clock3, Wifi, ChevronDown, GitBranch } from 'lucide-react';
+import { useMemo } from "react";
+import { Link } from "react-router-dom";
+import { Activity, Clock3, Wifi, ChevronDown, GitBranch } from "lucide-react";
 
-import { ContentLayout } from '@/components/admin-panel/content-layout';
+import { ContentLayout } from "@/components/admin-panel/content-layout";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -10,24 +10,31 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
+} from "@/components/ui/breadcrumb";
 
-import type { MonitorEventType } from '@/types/monitor';
+import type { MonitorEventType } from "@/types/monitor";
 
-import { useMonitorWebSocket } from '@/hooks/useMonitorWebSocket';
-import { useMonitorStore } from '@/stores/monitorStore';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useMonitorWebSocket } from "@/hooks/useMonitorWebSocket";
+import { useMonitorStore } from "@/stores/monitorStore";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { ConnectionStatus } from './ConnectionStatus';
-import { EventLog } from './EventLog';
+} from "@/components/ui/dropdown-menu";
+import { ConnectionStatus } from "./ConnectionStatus";
+import { EventLog } from "./EventLog";
+import { SessionsPanel } from "./SessionsPanel";
 
 export const MonitorPanel = () => {
   const {
@@ -36,7 +43,7 @@ export const MonitorPanel = () => {
     stats,
     isConnected,
     clearHistory,
-    resetStats
+    resetStats,
   } = useMonitorWebSocket();
 
   const {
@@ -47,22 +54,22 @@ export const MonitorPanel = () => {
     searchQuery,
     setSearchQuery,
     eventTypeFilter,
-    setEventTypeFilter
+    setEventTypeFilter,
   } = useMonitorStore();
 
-  const eventTypeLabels: Record<MonitorEventType | 'all', string> = {
-    all: '全部事件',
-    mod_connected: '模组上线',
-    mod_disconnected: '模组下线',
-    frontend_connected: '前端连接',
-    frontend_disconnected: '前端断开',
-    message_received: '消息接收',
-    message_sent: '消息发送',
-    token_stats: 'Token 使用统计',
-    llm_request: 'LLM 请求',
-    llm_response: 'LLM 响应',
-    llm_error: 'LLM 错误',
-    chat_message: '聊天消息',
+  const eventTypeLabels: Record<MonitorEventType | "all", string> = {
+    all: "全部事件",
+    mod_connected: "模组上线",
+    mod_disconnected: "模组下线",
+    frontend_connected: "前端连接",
+    frontend_disconnected: "前端断开",
+    message_received: "消息接收",
+    message_sent: "消息发送",
+    token_stats: "Token 使用统计",
+    llm_request: "LLM 请求",
+    llm_response: "LLM 响应",
+    llm_error: "LLM 错误",
+    chat_message: "聊天消息",
   };
 
   const totalMessages = useMemo(() => {
@@ -71,46 +78,46 @@ export const MonitorPanel = () => {
   }, [stats]);
 
   const lastResetLabel = useMemo(() => {
-    if (!stats?.last_reset_at) return '尚未重置';
+    if (!stats?.last_reset_at) return "尚未重置";
     return new Date(stats.last_reset_at).toLocaleString();
   }, [stats?.last_reset_at]);
 
   const statCards = useMemo(
     () => [
       {
-        title: '总消息数',
+        title: "总消息数",
         value: totalMessages,
         description: `上次重置：${lastResetLabel}`,
-        Icon: Activity
+        Icon: Activity,
       },
       {
-        title: 'WebSocket 状态',
+        title: "WebSocket 状态",
         value: (
-          <div className='flex items-center gap-2'>
+          <div className="flex items-center gap-2">
             <span
-              className={`h-2.5 w-2.5 rounded-full ${isConnected ? 'bg-emerald-500' : 'bg-slate-400'}`}
+              className={`h-2.5 w-2.5 rounded-full ${isConnected ? "bg-emerald-500" : "bg-slate-400"}`}
               aria-hidden
             />
-            <span>{isConnected ? '已连接' : '未连接'}</span>
+            <span>{isConnected ? "已连接" : "未连接"}</span>
           </div>
         ),
-        description: isConnected ? '实时同步正常' : '等待连接或检查服务器',
-        Icon: Wifi
+        description: isConnected ? "实时同步正常" : "等待连接或检查服务器",
+        Icon: Wifi,
       },
       {
-        title: '事件记录',
+        title: "事件记录",
         value: events.length,
-        description: '当前会话累计事件',
-        Icon: Clock3
+        description: "当前会话累计事件",
+        Icon: Clock3,
       },
       {
-        title: '分支',
-        value: 'Main',
-        description: '当前开发分支',
-        Icon: GitBranch
-      }
+        title: "分支",
+        value: "Main",
+        description: "当前开发分支",
+        Icon: GitBranch,
+      },
     ],
-    [isConnected, lastResetLabel, totalMessages, events.length]
+    [isConnected, lastResetLabel, totalMessages],
   );
 
   return (
@@ -137,92 +144,142 @@ export const MonitorPanel = () => {
         </div>
 
         {/* 统计卡片 */}
-        <div className='grid gap-4 sm:grid-cols-2 xl:grid-cols-4'>
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {statCards.map(({ title, value, description, Icon }) => (
             <Card key={title}>
-              <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-                <CardTitle className='text-sm font-medium'>{title}</CardTitle>
-                <Icon className='h-5 w-5 text-muted-foreground' aria-hidden />
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">{title}</CardTitle>
+                <Icon className="h-5 w-5 text-muted-foreground" aria-hidden />
               </CardHeader>
               <CardContent>
-                <div className='text-3xl font-bold tabular-nums'>{value}</div>
-                <p className='mt-1 text-xs text-muted-foreground'>{description}</p>
+                <div className="text-3xl font-bold tabular-nums">{value}</div>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {description}
+                </p>
               </CardContent>
             </Card>
           ))}
         </div>
 
         {/* 连接状态 */}
-        <ConnectionStatus isConnected={isConnected} connectionStatus={connectionStatus} />
+        <ConnectionStatus
+          isConnected={isConnected}
+          connectionStatus={connectionStatus}
+        />
 
         {/* 工具栏 */}
         <Card>
-          <CardHeader className='pb-3'>
-            <CardTitle className='text-base'>筛选与视图控制</CardTitle>
-            <CardDescription>搜索事件、筛选类型，并切换滚动与时间戳显示</CardDescription>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base">筛选与视图控制</CardTitle>
+            <CardDescription>
+              搜索事件、筛选类型，并切换滚动与时间戳显示
+            </CardDescription>
           </CardHeader>
-          <CardContent className='flex flex-wrap items-center gap-3 md:gap-4'>
-            <div className='flex-1 min-w-[220px]'>
+          <CardContent className="flex flex-wrap items-center gap-3 md:gap-4">
+            <div className="flex-1 min-w-[220px]">
               <Input
-                placeholder='搜索事件...'
+                placeholder="搜索事件..."
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
-                className='min-h-11'
+                className="min-h-11"
               />
             </div>
-            <div className='min-w-[160px]'>
+            <div className="min-w-40]">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant='outline' className='w-full justify-between min-h-11'>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-between min-h-11"
+                  >
                     {eventTypeLabels[eventTypeFilter]}
-                    <ChevronDown className='h-4 w-4 opacity-50' />
+                    <ChevronDown className="h-4 w-4 opacity-50" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align='end' className='w-56'>
-                  <DropdownMenuRadioGroup value={eventTypeFilter} onValueChange={(value) => setEventTypeFilter(value as MonitorEventType | 'all')}>
-                    <DropdownMenuRadioItem value='all'>全部事件</DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value='mod_connected'>模组上线</DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value='mod_disconnected'>模组下线</DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value='frontend_connected'>前端连接</DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value='frontend_disconnected'>前端断开</DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value='message_received'>消息接收</DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value='message_sent'>消息发送</DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value='token_stats'>Token 使用统计</DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value='llm_request'>LLM 请求</DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value='llm_response'>LLM 响应</DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value='llm_error'>LLM 错误</DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value='chat_message'>聊天消息</DropdownMenuRadioItem>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuRadioGroup
+                    value={eventTypeFilter}
+                    onValueChange={(value) =>
+                      setEventTypeFilter(value as MonitorEventType | "all")
+                    }
+                  >
+                    <DropdownMenuRadioItem value="all">
+                      全部事件
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="mod_connected">
+                      模组上线
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="mod_disconnected">
+                      模组下线
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="frontend_connected">
+                      前端连接
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="frontend_disconnected">
+                      前端断开
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="message_received">
+                      消息接收
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="message_sent">
+                      消息发送
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="token_stats">
+                      Token 使用统计
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="llm_request">
+                      LLM 请求
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="llm_response">
+                      LLM 响应
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="llm_error">
+                      LLM 错误
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="chat_message">
+                      聊天消息
+                    </DropdownMenuRadioItem>
                   </DropdownMenuRadioGroup>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
             <Button
-              variant={autoScroll ? 'default' : 'secondary'}
+              variant={autoScroll ? "default" : "secondary"}
               onClick={toggleAutoScroll}
-              className='min-h-11 px-4'
-              aria-label='自动滚动'
+              className="min-h-11 px-4"
+              aria-label="自动滚动"
             >
-              {autoScroll ? '开启' : '关闭'}
+              {autoScroll ? "开启" : "关闭"}
             </Button>
             <Button
-              variant={showTimestamps ? 'default' : 'secondary'}
+              variant={showTimestamps ? "default" : "secondary"}
               onClick={toggleTimestamps}
-              className='min-h-11 px-4'
+              className="min-h-11 px-4"
             >
-              时间戳：{showTimestamps ? '显示' : '隐藏'}
+              时间戳：{showTimestamps ? "显示" : "隐藏"}
             </Button>
-            <Button variant='secondary' className='min-h-11 px-4' onClick={resetStats}>
+            <Button
+              variant="secondary"
+              className="min-h-11 px-4"
+              onClick={resetStats}
+            >
               重置统计
             </Button>
-            <Button variant='destructive' className='min-h-11 px-4' onClick={clearHistory}>
+            <Button
+              variant="destructive"
+              className="min-h-11 px-4"
+              onClick={clearHistory}
+            >
               清空日志
             </Button>
           </CardContent>
         </Card>
 
-        {/* 事件日志 */}
-        <div className='pt-4'>
-          <EventLog events={events} />
+        {/* 事件日志和会话管理 */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 pt-4">
+          <div className="lg:col-span-2">
+            <EventLog events={events} />
+          </div>
+          <SessionsPanel />
         </div>
       </div>
     </ContentLayout>

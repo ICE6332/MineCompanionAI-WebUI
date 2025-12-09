@@ -1,4 +1,4 @@
-import { Monitor, Settings, LayoutGrid } from "lucide-react";
+import { Monitor, Settings, LayoutGrid, Cpu, Brain } from "lucide-react";
 import { SettingsIcon } from "@/components/ui/settings";
 import { MonitorCheckIcon } from "@/components/ui/monitor-check";
 import { UserRoundCheckIcon } from "@/components/ui/user-round-check";
@@ -42,7 +42,7 @@ export function getMenuList(pathname: string): Group[] {
       menus: [
         {
           href: "/test-card",
-          label: "角色测试",
+          label: "角色卡",
           icon: UserRoundCheckIcon
         },
         {
