@@ -221,7 +221,7 @@ bun add -d tailwindcss@latest @tailwindcss/vite@latest
 
 ## 📄 许可证
 
-MIT License
+本项目采用AGPL3.0许可证
 
 ---
 
