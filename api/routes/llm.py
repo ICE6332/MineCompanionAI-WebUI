@@ -67,7 +67,9 @@ class LLMConfigRequest(BaseModel):
 
 
 @router.post("/player")
-async def handle_player_request(payload: ConversationRequest, llm: LLMDep) -> Dict[str, Any]:
+async def handle_player_request(
+    payload: ConversationRequest, llm: LLMDep
+) -> Dict[str, Any]:
     """接收玩家消息，压缩为紧凑协议并调用真实 LLM 服务。"""
 
     standard_request: Dict[str, Any] = payload.model_dump(
@@ -78,32 +80,44 @@ async def handle_player_request(payload: ConversationRequest, llm: LLMDep) -> Di
     if llm_config_log:
         masked_payload["llmConfig"] = llm_config_log.copy()
         if llm_config_log.get("apiKey"):
-            masked_payload["llmConfig"]["apiKey"] = _mask_api_key(llm_config_log.get("apiKey"))
+            masked_payload["llmConfig"]["apiKey"] = _mask_api_key(
+                llm_config_log.get("apiKey")
+            )
     logger.info("收到玩家 LLM 请求: payload=%s", masked_payload)
 
     try:
-        
         # 如果前端提供了 LLM 配置，则覆盖后端默认配置
         if payload.llmConfig:
-            logger.info(f"使用前端提供的 LLM 配置: provider={payload.llmConfig.get('provider')}, model={payload.llmConfig.get('model')}")
-            llm.config["provider"] = payload.llmConfig.get("provider", llm.config["provider"])
+            logger.info(
+                f"使用前端提供的 LLM 配置: provider={payload.llmConfig.get('provider')}, model={payload.llmConfig.get('model')}"
+            )
+            llm.config["provider"] = payload.llmConfig.get(
+                "provider", llm.config["provider"]
+            )
             llm.config["model"] = payload.llmConfig.get("model", llm.config["model"])
-            llm.config["api_key"] = payload.llmConfig.get("apiKey", llm.config["api_key"])
-            llm.config["base_url"] = payload.llmConfig.get("baseUrl", llm.config["base_url"])
+            llm.config["api_key"] = payload.llmConfig.get(
+                "apiKey", llm.config["api_key"]
+            )
+            llm.config["base_url"] = payload.llmConfig.get(
+                "baseUrl", llm.config["base_url"]
+            )
 
         api_key = llm.config.get("api_key")
         if not api_key:
             logger.error("LLM 请求失败：API Key 未配置")
             raise HTTPException(status_code=400, detail="API Key 未配置")
-        
+
         # 1. 构造 Prompt
         player_name = standard_request.get("playerName", "Player")
         message_content = standard_request.get("message", "")
-        
+
         # 简单的 Prompt 构造 (后续可移至 core/personality)
         messages = [
-            {"role": "system", "content": f"你是一个 Minecraft 游戏中的 AI 伙伴。你的名字叫 {standard_request.get('companionName', 'AI')}。"},
-            {"role": "user", "content": f"[{player_name}]: {message_content}"}
+            {
+                "role": "system",
+                "content": f"你是一个 Minecraft 游戏中的 AI 伙伴。你的名字叫 {standard_request.get('companionName', 'AI')}。",
+            },
+            {"role": "user", "content": f"[{player_name}]: {message_content}"},
         ]
 
         # 2. 调用 LLM 服务（禁用缓存，确保每次对话都是新生成的）
@@ -117,14 +131,14 @@ async def handle_player_request(payload: ConversationRequest, llm: LLMDep) -> Di
         except TypeError:
             response_preview = str(response)
         logger.info("LLM 原始响应（前 200 字符）: %s", response_preview[:200])
-        
+
         # 4. 构造标准响应
         standard_response: Dict[str, Any] = {
             "type": "conversation_response",
             "playerName": player_name,
             "message": llm_reply,
             # 暂时保留简单的动作逻辑，或者让 LLM 输出 JSON 格式的动作
-            "action": [], 
+            "action": [],
         }
 
         # 5. 协议转换 (保持兼容性)
@@ -135,11 +149,15 @@ async def handle_player_request(payload: ConversationRequest, llm: LLMDep) -> Di
         return expanded_response
     except Exception as exc:
         logger.exception("处理 LLM 请求失败: %s", exc)
-        raise HTTPException(status_code=500, detail=f"LLM 处理失败: {str(exc)}") from exc
+        raise HTTPException(
+            status_code=500, detail=f"LLM 处理失败: {str(exc)}"
+        ) from exc
 
 
 @router.post("/config")
-async def save_llm_config(payload: LLMConfigRequest, llm: LLMDep, request: Request) -> Dict[str, str]:
+async def save_llm_config(
+    payload: LLMConfigRequest, llm: LLMDep, request: Request
+) -> Dict[str, str]:
     """保存 LLM 配置并刷新后端依赖。"""
 
     settings_path = Path("config/settings.json")
@@ -190,7 +208,9 @@ async def save_llm_config(payload: LLMConfigRequest, llm: LLMDep, request: Reque
         if hasattr(request.app.state, "llm_service"):
             try:
                 if hasattr(request.app.state.llm_service, "_load_config"):
-                    request.app.state.llm_service.config = request.app.state.llm_service._load_config()
+                    request.app.state.llm_service.config = (
+                        request.app.state.llm_service._load_config()
+                    )
                     logger.info("✅ WebSocket LLM 配置已重新加载")
             except Exception as exc:  # noqa: BLE001
                 logger.warning("WebSocket LLM 配置热加载失败: %s", exc)
@@ -198,4 +218,6 @@ async def save_llm_config(payload: LLMConfigRequest, llm: LLMDep, request: Reque
         return {"status": "ok", "message": "配置已保存"}
     except Exception as exc:  # noqa: BLE001
         logger.exception("保存 LLM 配置失败: %s", exc)
-        raise HTTPException(status_code=500, detail="保存 LLM 配置失败，请稍后重试") from exc
+        raise HTTPException(
+            status_code=500, detail="保存 LLM 配置失败，请稍后重试"
+        ) from exc

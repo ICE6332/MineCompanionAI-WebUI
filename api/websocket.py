@@ -17,6 +17,7 @@ from core.dependencies import (
     ConnectionManagerDep,
     LLMDep,
     ConversationContextDep,
+    EngineManagerDep,
 )
 from config.settings import settings
 from api.handlers.registry import get_handler
@@ -39,6 +40,7 @@ async def websocket_endpoint(
     conn_mgr: ConnectionManagerDep,
     llm_service: LLMDep,
     conversation_context: ConversationContextDep,
+    engine_manager: EngineManagerDep,
 ):
     """
     WebSocket 端点
@@ -146,6 +148,7 @@ async def websocket_endpoint(
                 metrics=metrics,
                 llm_service=llm_service,
                 conversation_context=conversation_context,
+                engine_manager=engine_manager,
             )
             response_preview = None
             if handler:

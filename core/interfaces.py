@@ -5,10 +5,14 @@
 
 from __future__ import annotations
 
-from typing import Any, Callable, Dict, List, Optional, Protocol
+from datetime import datetime, timedelta
+from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional, Protocol
 
 from core.monitor.event_types import MonitorEventType
 from models.monitor import ConnectionStatus, MessageStats, TokenTrendStats
+
+if TYPE_CHECKING:
+    from core.memory.conversation_context import ConversationSession
 
 
 class EventBusInterface(Protocol):
@@ -87,7 +91,9 @@ class ConnectionManagerInterface(Protocol):
 class ConversationContextInterface(Protocol):
     """会话上下文接口，管理游戏玩家的历史消息。"""
 
-    def create_session(self, client_id: str, player_name: str): ...
+    def create_session(
+        self, client_id: str, player_name: str
+    ) -> "ConversationSession": ...
 
     def add_message(
         self, client_id: str, role: str, content: str, player_name: Optional[str] = None
@@ -98,3 +104,59 @@ class ConversationContextInterface(Protocol):
     def clear_session(self, client_id: str) -> None: ...
 
     def has_session(self, client_id: str) -> bool: ...
+
+
+class EngineHandleInterface(Protocol):
+    """WASM Engine 实例句柄的标记接口。"""
+
+
+class WASMRuntimeInterface(Protocol):
+    """WASM 运行时接口，负责创建与驱动引擎实例。"""
+
+    def create_engine(self, config_json: str) -> EngineHandleInterface: ...
+
+    def process(self, handle: EngineHandleInterface, input_json: str) -> List[str]: ...
+
+    def tick(self, handle: EngineHandleInterface, elapsed_ms: int) -> List[str]: ...
+
+
+class EngineSessionInterface(Protocol):
+    """单个引擎会话接口，记录会话状态。"""
+
+    session_id: str
+    character_id: str
+    initialized: bool
+    last_active: datetime
+
+    async def on_world_diff(
+        self,
+        runtime: Any,
+        vision_store: Any,
+        story_store: Any,
+        diff: dict,
+    ) -> list[dict]: ...
+
+    async def on_player_message(
+        self,
+        runtime: Any,
+        player_id: str,
+        text: str,
+    ) -> list[dict]: ...
+
+
+class EngineSessionManagerInterface(Protocol):
+    """多会话管理接口，负责获取与清理引擎会话。"""
+
+    async def get_or_create(
+        self,
+        session_id: str,
+        character_id: str,
+        character_card: Dict[str, Any],
+        config: Dict[str, Any],
+    ) -> EngineSessionInterface: ...
+
+    def get(self, session_id: str) -> Optional[EngineSessionInterface]: ...
+
+    async def cleanup_idle(self, timeout: timedelta) -> None: ...
+
+    async def close_all(self) -> None: ...
