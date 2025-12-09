@@ -5,7 +5,6 @@ import { useRef } from "react";
 import { cn } from "@/lib/utils";
 import { getMenuList } from "@/lib/menu-list";
 import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { CollapseMenuButton } from "@/components/admin-panel/collapse-menu-button";
 import { useTheme } from "@/components/theme-provider";
 import {
@@ -67,13 +66,14 @@ function MenuItem({ href, label, icon: Icon, active, pathname, isOpen }: MenuIte
           <TooltipTrigger asChild>
             <Button
               variant={
-                (active === undefined &&
-                  pathname.startsWith(href)) ||
-                  active
-                  ? "secondary"
+                (active === undefined && pathname.startsWith(href)) || active
+                  ? (isOpen === false ? "ghost" : "secondary")
                   : "ghost"
               }
-              className="w-full justify-start min-h-11 py-2 mb-1"
+              className={cn(
+                "w-full min-h-11 py-2 mb-1",
+                isOpen === false ? "justify-center" : "justify-start"
+              )}
               asChild
               // 将悬停事件绑定在按钮上，而不是图标上
               // 这样无论鼠标悬停在文字还是图标上，都能触发动画
@@ -91,7 +91,7 @@ function MenuItem({ href, label, icon: Icon, active, pathname, isOpen }: MenuIte
                   className={cn(
                     "max-w-[200px] truncate",
                     isOpen === false
-                      ? "-translate-x-96 opacity-0"
+                      ? "hidden"
                       : "translate-x-0 opacity-100"
                   )}
                 >
@@ -131,11 +131,11 @@ export function Menu({ isOpen }: MenuProps) {
   };
 
   return (
-    <ScrollArea className="[&>div>div[style]]:!block">
-      <nav className="mt-8 h-full w-full">
-        <ul className="flex flex-col min-h-[calc(100vh-48px-36px-16px-32px)] lg:min-h-[calc(100vh-32px-40px-32px)] items-start space-y-1 px-2">
+    <div className="flex-1 w-full overflow-hidden flex flex-col">
+      <nav className="mt-4 h-full w-full">
+        <ul className="flex flex-col h-full items-start space-y-1 px-2">
           {menuList.map(({ groupLabel, menus }, index) => (
-            <li className={cn("w-full", groupLabel ? "pt-5" : "")} key={index}>
+            <li className={cn("w-full", groupLabel ? "pt-2" : "")} key={index}>
               {(isOpen && groupLabel) || isOpen === undefined ? (
                 <p className="text-sm font-medium text-muted-foreground px-4 pb-2 max-w-[248px] truncate">
                   {groupLabel}
@@ -219,6 +219,6 @@ export function Menu({ isOpen }: MenuProps) {
           </li>
         </ul>
       </nav>
-    </ScrollArea>
+    </div>
   );
 }

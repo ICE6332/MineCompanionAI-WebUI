@@ -67,7 +67,8 @@ const { commands, result } = concurrently(
   [
     { name: 'backend', command: 'bun run dev:backend', prefixColor: 'blue', cwd: projectRoot },
     // 等待后端健康检查通过后再启动前端，避免代理初始连接被拒绝
-    { name: 'frontend', command: 'node scripts/wait-backend.js && bun run dev:frontend', prefixColor: 'magenta', cwd: projectRoot },
+    // 直接在 frontend 目录运行，避免 bun --cwd 在 Windows 下的兼容性问题
+    { name: 'frontend', command: 'node ../scripts/wait-backend.js && bun run dev', prefixColor: 'magenta', cwd: path.join(projectRoot, 'frontend') },
   ],
   {
     killOthers: ['failure', 'success'],

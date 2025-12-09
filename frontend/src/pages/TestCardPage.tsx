@@ -1,7 +1,7 @@
-import { useState } from "react"
-import { Link } from "react-router-dom"
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
-import { ContentLayout } from "@/components/admin-panel/content-layout"
+import { ContentLayout } from "@/components/admin-panel/content-layout";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,15 +9,22 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
+} from "@/components/ui/breadcrumb";
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Switch } from "@/components/ui/switch"
-import AvatarUpload from "@/components/character/avatar-upload"
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
+import AvatarUpload from "@/components/character/avatar-upload";
+import { MemoryPanel } from "@/components/character/MemoryPanel";
 
 const TestCardPage = () => {
   const [character, setCharacter] = useState({
@@ -26,21 +33,21 @@ const TestCardPage = () => {
     personality: "Friendly, helpful, and knowledgeable.",
     systemPrompt: "You are a helpful AI assistant.",
     isActive: true,
-  })
+  });
 
   const handleAvatarChange = (file: File) => {
-    console.log("Avatar changed:", file)
+    console.log("Avatar changed:", file);
     // Handle file upload logic here
-  }
+  };
 
   const handleSave = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log("Saving character:", character)
+    e.preventDefault();
+    console.log("Saving character:", character);
     // Handle save logic here
-  }
+  };
 
   return (
-    <ContentLayout title="角色测试">
+    <ContentLayout title="角色卡">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -50,7 +57,7 @@ const TestCardPage = () => {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>角色测试</BreadcrumbPage>
+            <BreadcrumbPage>角色卡</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
@@ -73,7 +80,7 @@ const TestCardPage = () => {
 
           <form onSubmit={handleSave} className="space-y-8">
             <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start">
-              <div className="flex-shrink-0">
+              <div className="shrink-0">
                 <AvatarUpload onChange={handleAvatarChange} />
                 <p className="text-muted-foreground mt-2 text-xs text-center">
                   点击或拖拽上传
@@ -86,7 +93,9 @@ const TestCardPage = () => {
                     <Input
                       id="name"
                       value={character.name}
-                      onChange={(e) => setCharacter({ ...character, name: e.target.value })}
+                      onChange={(e) =>
+                        setCharacter({ ...character, name: e.target.value })
+                      }
                       placeholder="例如：Emiya"
                     />
                   </div>
@@ -96,7 +105,9 @@ const TestCardPage = () => {
                       <Switch
                         id="isActive"
                         checked={character.isActive}
-                        onCheckedChange={(checked) => setCharacter({ ...character, isActive: checked })}
+                        onCheckedChange={(checked) =>
+                          setCharacter({ ...character, isActive: checked })
+                        }
                       />
                       <span className="text-sm text-muted-foreground">
                         {character.isActive ? "已启用" : "已禁用"}
@@ -110,7 +121,12 @@ const TestCardPage = () => {
                   <Input
                     id="description"
                     value={character.description}
-                    onChange={(e) => setCharacter({ ...character, description: e.target.value })}
+                    onChange={(e) =>
+                      setCharacter({
+                        ...character,
+                        description: e.target.value,
+                      })
+                    }
                     placeholder="一句话描述角色的主要特征..."
                   />
                 </div>
@@ -123,7 +139,9 @@ const TestCardPage = () => {
                 <Textarea
                   id="personality"
                   value={character.personality}
-                  onChange={(e) => setCharacter({ ...character, personality: e.target.value })}
+                  onChange={(e) =>
+                    setCharacter({ ...character, personality: e.target.value })
+                  }
                   placeholder="详细描述角色的性格、说话方式和行为习惯..."
                   rows={4}
                   className="resize-y"
@@ -135,7 +153,9 @@ const TestCardPage = () => {
                 <Textarea
                   id="systemPrompt"
                   value={character.systemPrompt}
-                  onChange={(e) => setCharacter({ ...character, systemPrompt: e.target.value })}
+                  onChange={(e) =>
+                    setCharacter({ ...character, systemPrompt: e.target.value })
+                  }
                   placeholder="角色的核心指令和规则设定..."
                   rows={6}
                   className="font-mono text-sm resize-y"
@@ -147,16 +167,23 @@ const TestCardPage = () => {
               <Button type="submit" className="flex-1 sm:flex-none sm:w-32">
                 保存更改
               </Button>
-              <Button type="button" variant="destructive" className="flex-1 sm:flex-none sm:w-32">
+              <Button
+                type="button"
+                variant="destructive"
+                className="flex-1 sm:flex-none sm:w-32"
+              >
                 删除角色
               </Button>
             </div>
           </form>
         </Card>
+
+        {/* 记忆系统 */}
+        <MemoryPanel className="w-full" />
       </section>
     </ContentLayout>
-  )
-}
+  );
+};
 
-export default TestCardPage
-export { TestCardPage }
+export default TestCardPage;
+export { TestCardPage };

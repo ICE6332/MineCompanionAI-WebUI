@@ -5,6 +5,23 @@ export interface Card {
     description?: string;
 }
 
+export interface EngineSession {
+    session_id: string;
+    character_id: string;
+    status: 'active' | 'idle' | 'terminated';
+    created_at: string;
+    config?: Record<string, any>;
+}
+
+export interface MemoryEntry {
+    id: string;
+    content: string;
+    type: 'episodic' | 'semantic' | 'procedure';
+    importance: number;
+    timestamp: string;
+    tags?: string[];
+}
+
 const API_BASE = "/api";
 
 export interface TokenTrendData {
@@ -76,4 +93,66 @@ export const api = {
         if (!res.ok) throw new Error("Health check failed");
         return res.json();
     },
+
+    // --- 模拟引擎与记忆 API（后端接口尚未就绪）---
+
+    async getSessions(): Promise<EngineSession[]> {
+        // TODO: 替换为真实 API 调用
+        // const res = await fetch(`${API_BASE}/engine/sessions`);
+        // if (!res.ok) throw new Error("Failed to list sessions");
+        // return res.json();
+
+        // 模拟数据
+        return [
+            {
+                session_id: "sess-001",
+                character_id: "char-steve-helper",
+                status: "active",
+                created_at: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
+                config: { model: "gpt-4o", temperature: 0.7 }
+            },
+            {
+                session_id: "sess-002",
+                character_id: "char-zombie-guard",
+                status: "idle",
+                created_at: new Date(Date.now() - 1000 * 60 * 120).toISOString(),
+                config: { model: "gpt-3.5-turbo", temperature: 0.9 }
+            }
+        ];
+    },
+
+    async getMemories(sessionId: string, query?: string): Promise<MemoryEntry[]> {
+        // TODO: 替换为真实 API 调用
+        // const res = await fetch(`${API_BASE}/engine/sessions/${sessionId}/memory?q=${query || ''}`);
+        // if (!res.ok) throw new Error("Failed to fetch memories");
+        // return res.json();
+
+        // 模拟数据
+        return [
+            {
+                id: "mem-101",
+                content: "Player built a wooden house near the river.",
+                type: "episodic",
+                importance: 0.8,
+                timestamp: new Date(Date.now() - 1000 * 60 * 25).toISOString(),
+                tags: ["building", "player_activity"]
+            },
+            {
+                id: "mem-102",
+                content: "Wood identifies as oak, birch, spruce, etc. Essential for crafting.",
+                type: "semantic",
+                importance: 0.9,
+                timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
+                tags: ["knowledge", "crafting"]
+            },
+            {
+                id: "mem-103",
+                content: "Night time is dangerous due to hostile mobs spawning.",
+                type: "procedure" as const,
+                importance: 1.0,
+                timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString(),
+                tags: ["survival", "danger"]
+            }
+        ].filter(m => !query || m.content.toLowerCase().includes(query.toLowerCase())) as MemoryEntry[];
+    }
 };
