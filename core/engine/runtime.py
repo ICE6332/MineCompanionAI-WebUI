@@ -13,7 +13,7 @@ import wasmtime
 
 from core.interfaces import EngineHandleInterface, WASMRuntimeInterface
 
-WASM_FILE_NAME = "hello_wasm_bg.wasm"
+WASM_FILE_NAME = "llmnemeust_bg.wasm"
 
 
 @dataclass

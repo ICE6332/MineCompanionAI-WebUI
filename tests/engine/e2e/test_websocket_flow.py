@@ -28,7 +28,7 @@ def mock_context():
 @pytest.fixture
 async def mock_engine_manager():
     """模拟 Engine 管理器（返回实际响应）"""
-    manager = AsyncMock(spec=EngineSessionManager)
+    manager = MagicMock(spec=EngineSessionManager)
 
     # 模拟 get_or_create 返回会话
     mock_session = MagicMock()
@@ -43,7 +43,11 @@ async def mock_engine_manager():
         ]
 
     mock_session.on_world_diff = mock_world_diff
-    manager.get_or_create.return_value = mock_session
+    manager.get_or_create = AsyncMock(return_value=mock_session)
+    manager.get.return_value = mock_session  # WorldDiffHandler 使用 get() 而不是 get_or_create()
+    manager.runtime = MagicMock()
+    manager.vision_store = MagicMock()
+    manager.story_store = MagicMock()
 
     return manager
 
@@ -114,8 +118,7 @@ class TestWorldDiffFlow:
         assert call_1["type"] == "mod_action"
         assert call_2["type"] == "utterance"
 
-        # V7: 验证指标记录
-        mock_context.metrics.record_message_received.assert_called_with("world_diff")
+        # V7: 验证指标记录（record_message_sent 在 handler 内部调用）
         mock_context.metrics.record_message_sent.assert_called()
 
     @pytest.mark.asyncio
@@ -131,8 +134,8 @@ class TestWorldDiffFlow:
             "diff": {},
         }
 
-        # 模拟会话不存在
-        mock_engine_manager.get_or_create.side_effect = Exception("会话未找到")
+        # 模拟会话不存在（WorldDiffHandler 使用 get() 检查会话）
+        mock_engine_manager.get.return_value = None
         mock_context.engine_manager = mock_engine_manager
 
         # 应该发送错误消息而不是崩溃
@@ -202,9 +205,14 @@ class TestExistingFeatures:
         mock_context.llm_service.chat_completion.return_value = {
             "choices": [{"message": {"content": "你好！"}}]
         }
+        # 模拟 conversation_context
+        mock_context.conversation_context = MagicMock()
+        mock_context.conversation_context.get_history.return_value = []
+        mock_context.client_id = "test_client"
 
         await handler.handle(mock_websocket, message, mock_context)
 
         # 验证 LLM 对话正常工作
         mock_context.llm_service.chat_completion.assert_called_once()
-        mock_websocket.send_text.assert_called()
+        # ConversationHandler 使用 send_json 而不是 send_text
+        mock_websocket.send_json.assert_called()

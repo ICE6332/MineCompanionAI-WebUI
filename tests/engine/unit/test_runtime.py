@@ -23,7 +23,7 @@ class TestWASMRuntime:
 
     def test_load_wasm_module(self, runtime):
         """V1: 验证 WASM 模块能正确加载"""
-        wasm_path = Path(__file__).resolve().parents[3] / "wasm" / "hello_wasm_bg.wasm"
+        wasm_path = Path(__file__).resolve().parents[3] / "wasm" / "llmnemeust_bg.wasm"
         assert wasm_path.exists(), f"WASM 文件不存在: {wasm_path}"
         # runtime 初始化时已加载模块，验证无异常即可
         assert runtime._module is not None
