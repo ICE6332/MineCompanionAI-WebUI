@@ -31,10 +31,11 @@ def mock_runtime():
         input_data = orjson.loads(input_json)
         if input_data.get("type") == "init":
             return [orjson.dumps({"type": "engine_ready"}).decode("utf-8")]
-        elif input_data.get("type") == "world_diff":
+        elif input_data.get("type") == "event":
+            # 协议修复后，world_diff 被包装为 event 类型
             return [
                 orjson.dumps({"type": "mod_action", "action": "move"}).decode("utf-8"),
-                orjson.dumps({"type": "story_event", "kind": "observation", "summary": "测试"}).decode("utf-8"),
+                orjson.dumps({"type": "story_event", "id": "s1", "timestamp": 1, "kind": "observation", "summary": "测试"}).decode("utf-8"),
             ]
         return []
 
@@ -88,7 +89,8 @@ class TestEngineSession:
         init_call = mock_runtime.process.call_args_list[0]
         init_payload_str = init_call[0][1]
         parsed = orjson.loads(init_payload_str)
-        assert parsed["vision"] == {"entities": {"player": {"x": 100}}}
+        # 协议修复后，vision 被规范化，但保留原始 entities 数据
+        assert parsed["vision"]["entities"] == {"player": {"x": 100}}
         assert len(parsed["story_history"]) == 1
 
     @pytest.mark.asyncio
@@ -104,10 +106,10 @@ class TestEngineSession:
         diff = {"vision": {}, "tick": 200}
         outputs = await session.on_world_diff(mock_runtime, vision_store, story_store, diff)
 
-        # V3: 验证流程 Init → WorldDiff → StoryEvent
-        assert len(outputs) == 2
+        # V3: 验证流程 Init → Event → mod_action (story_event 被持久化，不返回)
+        # on_world_diff 只返回 mod_action 和 utterance，story_event 被持久化
+        assert len(outputs) == 1
         assert outputs[0]["type"] == "mod_action"
-        assert outputs[1]["type"] == "story_event"
 
         # V4: 验证持久化调用
         vision_store.save.assert_called_once()

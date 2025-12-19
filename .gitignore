@@ -101,6 +101,3 @@ CLAUDE.md
 
 # Local design documentation (not tracked)
 docs/
-
-# WASM binaries
-wasm/*.wasm

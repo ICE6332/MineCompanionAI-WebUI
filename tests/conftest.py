@@ -60,15 +60,3 @@ def mock_llm_service():
     return mock_llm()
 
 
-# Async test configuration
-@pytest.fixture(scope="session")
-def event_loop_policy():
-    """
-    Configure asyncio event loop policy for tests.
-
-    Returns:
-        The default event loop policy
-    """
-    import asyncio
-
-    return asyncio.get_event_loop_policy()
