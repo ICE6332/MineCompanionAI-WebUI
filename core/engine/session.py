@@ -61,6 +61,7 @@ def _normalize_world_diff(diff: dict) -> dict:
         "blocks": diff.get("blocks", []),
         "entities": diff.get("entities", []),
         "player_actions": diff.get("player_actions", []),
+        "vision": _normalize_vision(diff.get("vision")),
         "environment": diff.get("environment"),
     }
 
