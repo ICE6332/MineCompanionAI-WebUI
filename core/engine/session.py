@@ -139,17 +139,19 @@ class EngineSession(EngineSessionInterface):
 
         self.last_active = datetime.now(timezone.utc)
 
+        normalized_diff = _normalize_world_diff(diff)
+
         event_payload = {
             "type": "event",
             "kind": "world_change",
-            "data": _normalize_world_diff(diff),
+            "data": normalized_diff,
         }
 
         outputs = runtime.process(self.handle, orjson.dumps(event_payload).decode("utf-8"))
         parsed = [orjson.loads(line) for line in outputs if line.strip()]
 
-        vision_snapshot = diff.get("vision") if isinstance(diff, dict) else None
-        tick_value = diff.get("tick") if isinstance(diff, dict) else None
+        vision_snapshot = normalized_diff.get("vision") if isinstance(normalized_diff, dict) else None
+        tick_value = normalized_diff.get("tick") if isinstance(normalized_diff, dict) else None
         if vision_snapshot is not None:
             tick = tick_value
             if tick is None and isinstance(vision_snapshot, dict):
