@@ -18,6 +18,8 @@ async function waitForBackend() {
     return;
   }
 
+  console.log(`等待连接后端健康检查：${url} ...`);
+
   const started = Date.now();
   while (true) {
     try {
@@ -26,9 +28,7 @@ async function waitForBackend() {
         console.log(`后端已就绪：${url}`);
         return;
       }
-      console.warn(`健康检查未通过（HTTP ${res.status}），继续等待...`);
     } catch (err) {
-      console.warn(`无法连接后端：${err.message}，重试中...`);
     }
 
     if (Date.now() - started > timeoutMs) {

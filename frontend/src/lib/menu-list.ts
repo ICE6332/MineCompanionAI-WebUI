@@ -1,4 +1,4 @@
-import { Monitor, Settings, LayoutGrid, Cpu, Brain } from "lucide-react";
+
 import { SettingsIcon } from "@/components/ui/settings";
 import { MonitorCheckIcon } from "@/components/ui/monitor-check";
 import { UserRoundCheckIcon } from "@/components/ui/user-round-check";

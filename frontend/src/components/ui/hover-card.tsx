@@ -1,49 +1,51 @@
-import type { HTMLAttributes, PropsWithChildren } from "react";
-import { cn } from "@/lib/utils";
+"use client"
 
-export interface HoverCardProps extends HTMLAttributes<HTMLDivElement> {
-  openDelay?: number;
-  closeDelay?: number;
+import { PreviewCard as PreviewCardPrimitive } from "@base-ui/react/preview-card"
+
+import { cn } from "@/lib/utils"
+
+function HoverCard({ ...props }: PreviewCardPrimitive.Root.Props) {
+  return <PreviewCardPrimitive.Root data-slot="hover-card" {...props} />
 }
 
-export function HoverCard({
-  className,
-  children,
-  ...props
-}: PropsWithChildren<HoverCardProps>) {
+function HoverCardTrigger({ ...props }: PreviewCardPrimitive.Trigger.Props) {
   return (
-    <div className={cn("relative inline-block", className)} {...props}>
-      {children}
-    </div>
-  );
+    <PreviewCardPrimitive.Trigger data-slot="hover-card-trigger" {...props} />
+  )
 }
 
-export function HoverCardTrigger({
+function HoverCardContent({
   className,
-  children,
+  side = "bottom",
+  sideOffset = 4,
+  align = "center",
+  alignOffset = 4,
   ...props
-}: PropsWithChildren<HTMLAttributes<HTMLDivElement>>) {
+}: PreviewCardPrimitive.Popup.Props &
+  Pick<
+    PreviewCardPrimitive.Positioner.Props,
+    "align" | "alignOffset" | "side" | "sideOffset"
+  >) {
   return (
-    <div className={cn("inline-flex", className)} {...props}>
-      {children}
-    </div>
-  );
+    <PreviewCardPrimitive.Portal data-slot="hover-card-portal">
+      <PreviewCardPrimitive.Positioner
+        align={align}
+        alignOffset={alignOffset}
+        side={side}
+        sideOffset={sideOffset}
+        className="isolate z-50"
+      >
+        <PreviewCardPrimitive.Popup
+          data-slot="hover-card-content"
+          className={cn(
+            "data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 ring-foreground/10 bg-popover text-popover-foreground w-64 rounded-lg p-2.5 text-sm shadow-md ring-1 duration-100 z-50 origin-(--transform-origin) outline-hidden",
+            className
+          )}
+          {...props}
+        />
+      </PreviewCardPrimitive.Positioner>
+    </PreviewCardPrimitive.Portal>
+  )
 }
 
-export function HoverCardContent({
-  className,
-  children,
-  ...props
-}: PropsWithChildren<HTMLAttributes<HTMLDivElement>>) {
-  return (
-    <div
-      className={cn(
-        "absolute left-0 top-full z-50 mt-2 rounded-md border bg-popover p-3 shadow-md",
-        className,
-      )}
-      {...props}
-    >
-      {children}
-    </div>
-  );
-}
+export { HoverCard, HoverCardTrigger, HoverCardContent }

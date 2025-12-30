@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Square, Copy, RotateCcw, ThumbsUp, ThumbsDown, Paperclip, Mic } from "lucide-react";
+import { StopIcon, Copy01Icon, ArrowReloadHorizontalIcon, ThumbsUpIcon, ThumbsDownIcon, Paperclip, AiMicIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 
 import { ContentLayout } from "@/components/admin-panel/content-layout";
 import {
@@ -216,9 +217,7 @@ const AiChatPage = () => {
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link to="/">主页</Link>
-            </BreadcrumbLink>
+            <BreadcrumbLink render={<Link to="/">主页</Link>} />
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
@@ -250,7 +249,7 @@ const AiChatPage = () => {
                       onClick={() => handleCopy(message.content)}
                       title="复制"
                     >
-                      <Copy className="h-3.5 w-3.5" />
+                      <HugeiconsIcon icon={Copy01Icon} className="h-3.5 w-3.5" />
                     </Button>
                     <Button
                       variant="ghost"
@@ -260,14 +259,14 @@ const AiChatPage = () => {
                       disabled={isLoading}
                       title="重新生成"
                     >
-                      <RotateCcw className="h-3.5 w-3.5" />
+                      <HugeiconsIcon icon={ArrowReloadHorizontalIcon} className="h-3.5 w-3.5" />
                     </Button>
                     <div className="flex-1" />
                     <Button variant="ghost" size="icon" className="h-6 w-6" title="点赞">
-                      <ThumbsUp className="h-3.5 w-3.5" />
+                      <HugeiconsIcon icon={ThumbsUpIcon} className="h-3.5 w-3.5" />
                     </Button>
                     <Button variant="ghost" size="icon" className="h-6 w-6" title="点踩">
-                      <ThumbsDown className="h-3.5 w-3.5" />
+                      <HugeiconsIcon icon={ThumbsDownIcon} className="h-3.5 w-3.5" />
                     </Button>
                   </div>
                 )}
@@ -301,14 +300,14 @@ const AiChatPage = () => {
               <PromptInputTools className="justify-between p-2 items-center">
                 <div className="flex items-center gap-1">
                   <PromptInputButton size="icon" variant="ghost">
-                    <Paperclip className="h-4 w-4" />
+                    <HugeiconsIcon icon={Paperclip} className="h-4 w-4" />
                   </PromptInputButton>
                   <PromptInputButton size="icon" variant="ghost">
-                    <Mic className="h-4 w-4" />
+                    <HugeiconsIcon icon={AiMicIcon} className="h-4 w-4" />
                   </PromptInputButton>
-                  <Select value={selectedModel} onValueChange={handleModelChange}>
+                  <Select value={selectedModel} onValueChange={(val) => handleModelChange(val || '')}>
                     <SelectTrigger className="w-auto h-8 border-none shadow-none bg-transparent hover:bg-accent/50 gap-1 px-2 text-muted-foreground">
-                      <SelectValue placeholder="Model" />
+                      <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="gpt-4o">GPT-4o</SelectItem>
@@ -325,7 +324,7 @@ const AiChatPage = () => {
                   status={isLoading ? "streaming" : undefined}
                   className="rounded-full"
                 >
-                  {isLoading ? <Square className="h-4 w-4 fill-current" /> : null}
+                  {isLoading ? <HugeiconsIcon icon={StopIcon} className="h-4 w-4 fill-current" /> : null}
                 </PromptInputSubmit>
               </PromptInputTools>
             </PromptInput>

@@ -61,30 +61,25 @@ function MenuItem({ href, label, icon: Icon, active, pathname, isOpen }: MenuIte
 
   return (
     <div className="w-full">
-      <TooltipProvider disableHoverableContent>
-        <Tooltip delayDuration={100}>
-          <TooltipTrigger asChild>
-            <Button
-              variant={
-                (active === undefined && pathname.startsWith(href)) || active
-                  ? (isOpen === false ? "ghost" : "secondary")
-                  : "ghost"
-              }
-              className={cn(
-                "w-full min-h-11 py-2 mb-1",
-                isOpen === false ? "justify-center" : "justify-start"
-              )}
-              asChild
-              // 将悬停事件绑定在按钮上，而不是图标上
-              // 这样无论鼠标悬停在文字还是图标上，都能触发动画
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
-            >
+      <Tooltip delay={100}>
+        <TooltipTrigger render={
+          <Button
+            variant={
+              (active === undefined && pathname.startsWith(href)) || active
+                ? (isOpen === false ? "ghost" : "secondary")
+                : "ghost"
+            }
+            className={cn(
+              "w-full min-h-11 py-2 mb-1",
+              isOpen === false ? "justify-center" : "justify-start"
+            )}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            render={
               <Link to={href}>
                 <span
                   className={cn(isOpen === false ? "" : "mr-4")}
                 >
-                  {/* 将 ref 传递给图标组件，建立引用连接 */}
                   <Icon size={18} ref={iconRef} />
                 </span>
                 <p
@@ -98,15 +93,15 @@ function MenuItem({ href, label, icon: Icon, active, pathname, isOpen }: MenuIte
                   {label}
                 </p>
               </Link>
-            </Button>
-          </TooltipTrigger>
-          {isOpen === false && (
-            <TooltipContent side="right">
-              {label}
-            </TooltipContent>
-          )}
-        </Tooltip>
-      </TooltipProvider>
+            }
+          />
+        } />
+        {isOpen === false && (
+          <TooltipContent side="right">
+            {label}
+          </TooltipContent>
+        )}
+      </Tooltip>
     </div>
   );
 }
@@ -141,18 +136,16 @@ export function Menu({ isOpen }: MenuProps) {
                   {groupLabel}
                 </p>
               ) : !isOpen && isOpen !== undefined && groupLabel ? (
-                <TooltipProvider>
-                  <Tooltip delayDuration={100}>
-                    <TooltipTrigger className="w-full">
-                      <div className="w-full flex justify-center items-center">
-                        <Ellipsis className="h-5 w-5" />
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent side="right">
-                      <p>{groupLabel}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                <Tooltip delay={100}>
+                  <TooltipTrigger className="w-full">
+                    <div className="w-full flex justify-center items-center">
+                      <Ellipsis className="h-5 w-5" />
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    <p>{groupLabel}</p>
+                  </TooltipContent>
+                </Tooltip>
               ) : (
                 <p className="pb-2"></p>
               )}
@@ -187,35 +180,33 @@ export function Menu({ isOpen }: MenuProps) {
             </li>
           ))}
           <li className="w-full grow flex flex-col justify-end gap-2">
-            <TooltipProvider disableHoverableContent>
-              <Tooltip delayDuration={100}>
-                <TooltipTrigger asChild>
-                  <Button
-                    onClick={toggleTheme}
-                    variant="outline"
-                    className="w-full justify-center min-h-11 py-2"
-                    aria-label={`切换${themeLabel}`}
-                    onMouseEnter={handleThemeMouseEnter}
-                    onMouseLeave={handleThemeMouseLeave}
+            <Tooltip delay={100}>
+              <TooltipTrigger render={
+                <Button
+                  onClick={toggleTheme}
+                  variant="outline"
+                  className="w-full justify-center min-h-11 py-2"
+                  aria-label={`切换${themeLabel}`}
+                  onMouseEnter={handleThemeMouseEnter}
+                  onMouseLeave={handleThemeMouseLeave}
+                >
+                  <span className={cn(isOpen === false ? "" : "mr-4")}>
+                    <ThemeIcon size={18} ref={themeIconRef} />
+                  </span>
+                  <p
+                    className={cn(
+                      "whitespace-nowrap transition-opacity duration-300",
+                      isOpen === false ? "opacity-0 hidden" : "opacity-100"
+                    )}
                   >
-                    <span className={cn(isOpen === false ? "" : "mr-4")}>
-                      <ThemeIcon size={18} ref={themeIconRef} />
-                    </span>
-                    <p
-                      className={cn(
-                        "whitespace-nowrap transition-opacity duration-300",
-                        isOpen === false ? "opacity-0 hidden" : "opacity-100"
-                      )}
-                    >
-                      {themeLabel}
-                    </p>
-                  </Button>
-                </TooltipTrigger>
-                {isOpen === false && (
-                  <TooltipContent side="right">{themeLabel}</TooltipContent>
-                )}
-              </Tooltip>
-            </TooltipProvider>
+                    {themeLabel}
+                  </p>
+                </Button>
+              } />
+              {isOpen === false && (
+                <TooltipContent side="right">{themeLabel}</TooltipContent>
+              )}
+            </Tooltip>
           </li>
         </ul>
       </nav>

@@ -1,4 +1,5 @@
-import { Bot, Cable, Clock3, Signal } from 'lucide-react';
+import { ArtificialIntelligence03Icon, Cable, Clock01Icon, Wifi01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 
 import { Card, CardHeader, CardContent, CardDescription, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -54,18 +55,18 @@ export const ConnectionStatus = ({
         </CardHeader>
         <CardContent className='space-y-2 text-sm text-muted-foreground'>
           <div className='flex items-center gap-2'>
-            <Cable className='h-4 w-4 text-muted-foreground' aria-hidden />
+            <HugeiconsIcon icon={Cable} className='h-4 w-4 text-muted-foreground' aria-hidden />
             <span>客户端：{connectionStatus?.mod_client_id ?? '暂无标识'}</span>
           </div>
           {connectionStatus?.mod_connected_at && (
             <div className='flex items-center gap-2'>
-              <Clock3 className='h-4 w-4 text-muted-foreground' aria-hidden />
+              <HugeiconsIcon icon={Clock01Icon} className='h-4 w-4 text-muted-foreground' aria-hidden />
               <span>上线时间：{new Date(connectionStatus.mod_connected_at).toLocaleString()}</span>
             </div>
           )}
           {connectionStatus?.mod_last_message_at && (
             <div className='flex items-center gap-2'>
-              <Signal className='h-4 w-4 text-muted-foreground' aria-hidden />
+              <HugeiconsIcon icon={Wifi01Icon} className='h-4 w-4 text-muted-foreground' aria-hidden />
               <span>最近消息：{new Date(connectionStatus.mod_last_message_at).toLocaleString()}</span>
             </div>
           )}
@@ -88,15 +89,15 @@ export const ConnectionStatus = ({
         </CardHeader>
         <CardContent className='space-y-2 text-sm text-muted-foreground'>
           <div className='flex items-center gap-2'>
-            <Bot className='h-4 w-4 text-muted-foreground' aria-hidden />
+            <HugeiconsIcon icon={ArtificialIntelligence03Icon} className='h-4 w-4 text-muted-foreground' aria-hidden />
             <span>服务商：{displayProvider}</span>
           </div>
           <div className='flex items-center gap-2'>
-            <Signal className='h-4 w-4 text-muted-foreground' aria-hidden />
+            <HugeiconsIcon icon={Wifi01Icon} className='h-4 w-4 text-muted-foreground' aria-hidden />
             <span>模型：{model || '未配置'}</span>
           </div>
           <div className='flex items-center gap-2'>
-            <Signal className='h-4 w-4 text-muted-foreground' aria-hidden />
+            <HugeiconsIcon icon={Wifi01Icon} className='h-4 w-4 text-muted-foreground' aria-hidden />
             <span>状态：{llmReady ? '已就绪' : '需要配置'}</span>
           </div>
         </CardContent>

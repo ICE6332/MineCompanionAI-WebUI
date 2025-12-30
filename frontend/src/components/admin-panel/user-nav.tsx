@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { LayoutGrid, LogOut, User } from "lucide-react";
+import { Layout01Icon, Logout01Icon, UserIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -7,7 +8,6 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-  TooltipProvider
 } from "@/components/ui/tooltip";
 import {
   DropdownMenu,
@@ -22,26 +22,28 @@ import {
 export function UserNav() {
   return (
     <DropdownMenu>
-      <TooltipProvider disableHoverableContent>
-        <Tooltip delayDuration={100}>
-          <TooltipTrigger asChild>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="outline"
-                className="relative h-8 w-8 rounded-full"
-              >
-                <Avatar className="h-8 w-8">
-                  <AvatarImage src="#" alt="头像" />
-                  <AvatarFallback className="bg-transparent">用户</AvatarFallback>
-                </Avatar>
-              </Button>
-            </DropdownMenuTrigger>
-          </TooltipTrigger>
-          <TooltipContent side="bottom">个人资料</TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <Tooltip delay={100}>
+        <TooltipTrigger
+          render={
+            <DropdownMenuTrigger
+              render={
+                <Button
+                  variant="outline"
+                  className="relative h-8 w-8 rounded-full"
+                >
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage src="#" alt="头像" />
+                    <AvatarFallback className="bg-transparent">用户</AvatarFallback>
+                  </Avatar>
+                </Button>
+              }
+            />
+          }
+        />
+        <TooltipContent side="bottom">个人资料</TooltipContent>
+      </Tooltip>
 
-      <DropdownMenuContent className="w-56" align="end" forceMount>
+      <DropdownMenuContent className="w-56" align="end">
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none">张三</p>
@@ -52,22 +54,28 @@ export function UserNav() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem className="hover:cursor-pointer" asChild>
-            <Link to="/dashboard" className="flex items-center">
-              <LayoutGrid className="w-4 h-4 mr-3 text-muted-foreground" />
-              仪表盘
-            </Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem className="hover:cursor-pointer" asChild>
-            <Link to="/account" className="flex items-center">
-              <User className="w-4 h-4 mr-3 text-muted-foreground" />
-              账户
-            </Link>
-          </DropdownMenuItem>
+          <DropdownMenuItem
+            className="hover:cursor-pointer"
+            render={
+              <Link to="/dashboard" className="flex items-center">
+                <HugeiconsIcon icon={Layout01Icon} className="w-4 h-4 mr-3 text-muted-foreground" />
+                仪表盘
+              </Link>
+            }
+          />
+          <DropdownMenuItem
+            className="hover:cursor-pointer"
+            render={
+              <Link to="/account" className="flex items-center">
+                <HugeiconsIcon icon={UserIcon} className="w-4 h-4 mr-3 text-muted-foreground" />
+                账户
+              </Link>
+            }
+          />
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="hover:cursor-pointer" onClick={() => {}}>
-          <LogOut className="w-4 h-4 mr-3 text-muted-foreground" />
+        <DropdownMenuItem className="hover:cursor-pointer" onClick={() => { }}>
+          <HugeiconsIcon icon={Logout01Icon} className="w-4 h-4 mr-3 text-muted-foreground" />
           退出登录
         </DropdownMenuItem>
       </DropdownMenuContent>

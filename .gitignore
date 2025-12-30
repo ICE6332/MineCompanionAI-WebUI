@@ -75,6 +75,10 @@ htmlcov/
 *.bak
 *.cache
 
+# Temporary icon search scripts
+frontend/list_icons*.js
+frontend/list_icons*.ts
+
 # Project documentation (parent directory config files)
 AGENTS.md
 CLAUDE.md

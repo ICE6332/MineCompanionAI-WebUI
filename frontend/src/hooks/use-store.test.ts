@@ -10,7 +10,7 @@
  * @vitest-environment jsdom
  */
 
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
 import { renderHook, act, waitFor } from "@testing-library/react";
 import { create } from "zustand";
 import { useStore } from "./use-store";
@@ -21,6 +21,7 @@ interface TestStore {
   name: string;
   increment: () => void;
   setName: (name: string) => void;
+  reset: () => void;
 }
 
 const useTestStore = create<TestStore>((set) => ({
@@ -28,9 +29,15 @@ const useTestStore = create<TestStore>((set) => ({
   name: "test",
   increment: () => set((state) => ({ count: state.count + 1 })),
   setName: (name: string) => set({ name }),
+  reset: () => set({ count: 0, name: "test" }),
 }));
 
 describe("useStore", () => {
+  // Reset store state before each test to prevent state pollution
+  beforeEach(() => {
+    useTestStore.getState().reset();
+  });
+
   it("should initialize with selector result", async () => {
     const { result } = renderHook(() =>
       useStore(useTestStore, (state) => state.count)
@@ -38,7 +45,7 @@ describe("useStore", () => {
 
     // useStore returns the current value immediately after useEffect
     await waitFor(() => {
-      expect(result.current).toBe(2); // From previous test
+      expect(result.current).toBe(0); // Initial value
     });
   });
 
@@ -82,7 +89,7 @@ describe("useStore", () => {
     );
 
     await waitFor(() => {
-      expect(result.current).toBe(2); // From previous test
+      expect(result.current).toBe(0); // Initial value
     });
 
     // Change selector to return name instead
