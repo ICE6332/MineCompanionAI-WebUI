@@ -1,4 +1,5 @@
-import { Save } from "lucide-react";
+import { Save } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -69,9 +70,7 @@ export function ModelSettingsPage() {
             <Breadcrumb>
                 <BreadcrumbList>
                     <BreadcrumbItem>
-                        <BreadcrumbLink asChild>
-                            <Link to="/">主页</Link>
-                        </BreadcrumbLink>
+                        <BreadcrumbLink render={<Link to="/">主页</Link>} />
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>
@@ -91,16 +90,16 @@ export function ModelSettingsPage() {
                     <CardContent className="space-y-4">
                         <div className="space-y-2">
                             <Label htmlFor="provider">服务提供商</Label>
-                            <Select value={provider} onValueChange={setProvider}>
+                            <Select value={provider} onValueChange={(val) => setProvider(val || '')}>
                                 <SelectTrigger id="provider">
-                                    <SelectValue placeholder="选择提供商" />
+                                    <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="openai">OpenAI (官方)</SelectItem>
-                                    <SelectItem value="deepseek">DeepSeek (深度求索)</SelectItem>
-                                    <SelectItem value="moonshot">Moonshot (月之暗面)</SelectItem>
-                                    <SelectItem value="ollama">Ollama (本地)</SelectItem>
-                                    <SelectItem value="custom">自定义 (OpenAI 兼容)</SelectItem>
+                                    <SelectItem value="openai">OpenAI</SelectItem>
+                                    <SelectItem value="deepseek">DeepSeek</SelectItem>
+                                    <SelectItem value="moonshot">Moonshot</SelectItem>
+                                    <SelectItem value="ollama">Ollama</SelectItem>
+                                    <SelectItem value="custom">自定义</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
@@ -141,7 +140,7 @@ export function ModelSettingsPage() {
 
                         <div className="pt-4">
                             <Button onClick={handleSave}>
-                                <Save className="mr-2 h-4 w-4" />
+                                <HugeiconsIcon icon={Save} className="mr-2 h-4 w-4" />
                                 保存设置
                             </Button>
                         </div>

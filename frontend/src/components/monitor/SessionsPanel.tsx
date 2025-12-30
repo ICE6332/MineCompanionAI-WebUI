@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Plus, Power, RefreshCw, Clock, Activity, Cpu } from "lucide-react";
+import { PlusSignIcon, Power, RefreshIcon, Clock01Icon, Activity01Icon, CpuIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -81,21 +82,21 @@ export function SessionsPanel({ className }: SessionsPanelProps) {
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <div>
                     <CardTitle className="text-base flex items-center gap-2">
-                        <Cpu className="h-4 w-4" />
+                        <HugeiconsIcon icon={CpuIcon} className="h-4 w-4" />
                         引擎会话
                     </CardTitle>
                 </div>
                 <div className="flex gap-2">
                     <Button variant="ghost" size="icon" onClick={fetchSessions}>
-                        <RefreshCw className="h-4 w-4" />
+                        <HugeiconsIcon icon={RefreshIcon} className="h-4 w-4" />
                     </Button>
                     <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
-                        <DialogTrigger asChild>
+                        <DialogTrigger render={
                             <Button size="sm">
-                                <Plus className="mr-1 h-4 w-4" />
+                                <HugeiconsIcon icon={PlusSignIcon} className="mr-1 h-4 w-4" />
                                 新建
                             </Button>
-                        </DialogTrigger>
+                        } />
                         <DialogContent>
                             <DialogHeader>
                                 <DialogTitle>初始化新会话</DialogTitle>
@@ -157,11 +158,11 @@ export function SessionsPanel({ className }: SessionsPanelProps) {
                         </div>
                         <div className="flex items-center text-xs text-muted-foreground gap-4">
                             <span className="flex items-center gap-1">
-                                <Clock className="h-3 w-3" />
+                                <HugeiconsIcon icon={Clock01Icon} className="h-3 w-3" />
                                 {new Date(session.created_at).toLocaleTimeString()}
                             </span>
                             <span className="flex items-center gap-1">
-                                <Activity className="h-3 w-3" />
+                                <HugeiconsIcon icon={Activity01Icon} className="h-3 w-3" />
                                 {session.config?.model || 'Unknown'}
                             </span>
                         </div>
@@ -172,7 +173,7 @@ export function SessionsPanel({ className }: SessionsPanelProps) {
                                 className="w-full mt-2"
                                 onClick={() => handleTerminate(session.session_id)}
                             >
-                                <Power className="mr-2 h-3 w-3" />
+                                <HugeiconsIcon icon={Power} className="mr-2 h-3 w-3" />
                                 终止
                             </Button>
                         )}

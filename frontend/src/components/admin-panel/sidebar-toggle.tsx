@@ -1,4 +1,5 @@
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -17,7 +18,8 @@ export function SidebarToggle({ isOpen, setIsOpen }: SidebarToggleProps) {
         variant="outline"
         size="icon"
       >
-        <ChevronLeft
+        <HugeiconsIcon
+          icon={ChevronLeft}
           className={cn(
             "h-4 w-4 transition-transform ease-in-out duration-700",
             isOpen === false ? "rotate-180" : "rotate-0",

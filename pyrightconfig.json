@@ -1,11 +1,23 @@
 {
   "venvPath": ".",
   "venv": ".venv",
+  "include": [
+    "."
+  ],
+  "exclude": [
+    "**/node_modules",
+    "**/__pycache__",
+    "**/.*",
+    "frontend"
+  ],
   "executionEnvironments": [
     {
       "root": ".",
       "pythonVersion": "3.14",
-      "pythonPlatform": "Windows"
+      "pythonPlatform": "Windows",
+      "extraPaths": [
+        "."
+      ]
     }
   ],
   "typeCheckingMode": "basic",
@@ -13,5 +25,5 @@
   "reportMissingTypeStubs": false,
   "reportCallIssue": "none",
   "reportAttributeAccessIssue": "warning",
-  "stubPath": ".venv/Lib/site-packages"
+  "useLibraryCodeForTypes": true
 }

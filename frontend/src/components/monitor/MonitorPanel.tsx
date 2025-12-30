@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
-import { Activity, Clock3, Wifi, ChevronDown, GitBranch } from "lucide-react";
+import { Activity01Icon, Clock01Icon, Wifi01Icon, ChevronDown, GitBranchIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 
 import { ContentLayout } from "@/components/admin-panel/content-layout";
 import {
@@ -88,7 +89,7 @@ export const MonitorPanel = () => {
         title: "总消息数",
         value: totalMessages,
         description: `上次重置：${lastResetLabel}`,
-        Icon: Activity,
+        Icon: Activity01Icon,
       },
       {
         title: "WebSocket 状态",
@@ -102,19 +103,19 @@ export const MonitorPanel = () => {
           </div>
         ),
         description: isConnected ? "实时同步正常" : "等待连接或检查服务器",
-        Icon: Wifi,
+        Icon: Wifi01Icon,
       },
       {
         title: "事件记录",
         value: events.length,
         description: "当前会话累计事件",
-        Icon: Clock3,
+        Icon: Clock01Icon,
       },
       {
         title: "分支",
         value: "Main",
         description: "当前开发分支",
-        Icon: GitBranch,
+        Icon: GitBranchIcon,
       },
     ],
     [isConnected, lastResetLabel, totalMessages],
@@ -125,9 +126,7 @@ export const MonitorPanel = () => {
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link to="/">主页</Link>
-            </BreadcrumbLink>
+            <BreadcrumbLink render={<Link to="/">主页</Link>} />
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
@@ -149,7 +148,7 @@ export const MonitorPanel = () => {
             <Card key={title}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">{title}</CardTitle>
-                <Icon className="h-5 w-5 text-muted-foreground" aria-hidden />
+                <HugeiconsIcon icon={Icon} className="h-5 w-5 text-muted-foreground" aria-hidden />
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold tabular-nums">{value}</div>
@@ -186,15 +185,15 @@ export const MonitorPanel = () => {
             </div>
             <div className="min-w-40]">
               <DropdownMenu>
-                <DropdownMenuTrigger asChild>
+                <DropdownMenuTrigger render={
                   <Button
                     variant="outline"
                     className="w-full justify-between min-h-11"
                   >
                     {eventTypeLabels[eventTypeFilter]}
-                    <ChevronDown className="h-4 w-4 opacity-50" />
+                    <HugeiconsIcon icon={ChevronDown} className="h-4 w-4 opacity-50" />
                   </Button>
-                </DropdownMenuTrigger>
+                } />
                 <DropdownMenuContent align="end" className="w-56">
                   <DropdownMenuRadioGroup
                     value={eventTypeFilter}
