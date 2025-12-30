@@ -1,0 +1,9 @@
+# .codex - 保护配额，只审核心逻辑
+ignore_patterns:
+  - "*.lock"
+  - "requirements.lock.txt"
+  - "frontend/dist/**"
+  - "static/**"
+  - "docs/**"
+  - "*.md"       
+  - "frontend/src/components/ui/**"
