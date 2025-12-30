@@ -1,0 +1,33 @@
+# .gitattributes
+
+# === 依赖锁文件 ===
+bun.lockb linguist-generated=true
+uv.lock linguist-generated=true
+package-lock.json linguist-generated=true
+requirements.lock linguist-generated=true
+poetry.lock linguist-generated=true
+
+# === 前端构建产物 ===
+frontend/dist/** linguist-generated=true
+frontend/build/** linguist-generated=true
+frontend/.next/** linguist-generated=true
+
+# === 静态资源 ===
+static/** linguist-generated=true
+assets/** linguist-generated=true
+public/** linguist-generated=true
+*.svg linguist-generated=true
+*.png linguist-generated=true
+*.jpg linguist-generated=true
+*.ico linguist-generated=true
+
+# === 自动生成的 UI 组件 ===
+frontend/src/components/ui/** linguist-generated=true
+
+# === Python 缓存 ===
+__pycache__/** linguist-generated=true
+*.pyc linguist-generated=true
+
+# === 文档 ===
+*.md linguist-documentation
+docs/** linguist-documentation

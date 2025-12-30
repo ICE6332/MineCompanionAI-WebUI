@@ -1,0 +1,59 @@
+# .codex
+
+# 忽略文件模式（glob 语法）
+ignore_patterns:
+  # 锁文件
+  - "*.lock"
+  - "*.lockb"
+  - "uv.lock"
+  - "bun.lockb"
+  - "package-lock.json"
+  - "requirements.lock"
+  - "poetry.lock"
+  
+  # 构建产物和缓存
+  - "frontend/dist/**"
+  - "frontend/build/**"
+  - "frontend/.next/**"
+  - "__pycache__/**"
+  - "*.pyc"
+  - ".venv/**"
+  
+  # 静态资源
+  - "static/**"
+  - "assets/**"
+  - "public/**"
+  - "*.svg"
+  - "*.png"
+  - "*.jpg"
+  - "*.jpeg"
+  - "*.ico"
+  - "*.gif"
+  - "*.woff"
+  - "*.woff2"
+  
+  # 自动生成的代码
+  - "frontend/src/components/ui/**"
+  
+  # 文档
+  - "*.md"
+  - "docs/**"
+  
+  # 配置文件
+  - ".github/**"
+  - ".vscode/**"
+  - "*.config.js"
+  - "*.config.ts"
+
+# 审查偏好设置
+review_settings:
+  focus_areas:
+    - security
+    - logic_bugs
+    - performance
+  
+  # 不审查内容
+  skip_checks:
+    - formatting
+    - style
+    - documentation_typos
